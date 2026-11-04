@@ -1,0 +1,1226 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nairobi Gadget Store · POS</title>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+:root{--bg:#f3f4f6;--card:#fff;--ink:#111827;--muted:#6b7280;--line:#e5e7eb;--red:#e11d2e;--red-d:#b91423;--red-l:#fee2e4;--black:#0b0b0f;--green:#16a34a;--green-l:#dcfce7;--amber:#d97706;--amber-l:#fef3c7;--blue:#2563eb;--blue-l:#dbeafe;--shadow:0 1px 2px rgba(0,0,0,.05),0 4px 14px rgba(0,0,0,.05)}
+html,body{height:100%}
+body{font-family:Inter,system-ui,-apple-system,'Segoe UI',Roboto,sans-serif;background:var(--bg);color:var(--ink);font-size:14px;-webkit-font-smoothing:antialiased}
+button{font-family:inherit;cursor:pointer}
+input,select,textarea{font-family:inherit;font-size:13px;color:var(--ink)}
+.hidden{display:none!important}
+.muted{color:var(--muted)}
+/* buttons & inputs */
+.btn{height:36px;padding:0 14px;border-radius:9px;border:1.5px solid var(--line);background:#fff;font-size:13px;font-weight:600;color:var(--ink);transition:.15s;white-space:nowrap}
+.btn:hover{border-color:#cbd0d8;background:#f9fafb}
+.btn-primary{background:var(--red);border-color:var(--red);color:#fff}
+.btn-primary:hover{background:var(--red-d);border-color:var(--red-d)}
+.btn-dark{background:var(--black);border-color:var(--black);color:#fff}.btn-dark:hover{background:#222;border-color:#222}
+.btn-danger{color:var(--red);border-color:var(--red-l);background:#fff}.btn-danger:hover{background:var(--red-l);border-color:var(--red-l)}
+.btn-sm{height:28px;padding:0 10px;font-size:12px;border-radius:7px}
+.btn:disabled{opacity:.45;cursor:not-allowed}
+.inp{width:100%;height:36px;border-radius:9px;border:1.5px solid var(--line);background:#fff;padding:0 11px;outline:none;transition:.15s}
+.inp:focus{border-color:var(--red);box-shadow:0 0 0 3px var(--red-l)}
+textarea.inp{height:auto;padding:8px 11px;resize:vertical}
+.inp-sm{height:30px;border-radius:7px;border:1.5px solid var(--line);padding:0 8px;outline:none;background:#fff}
+.inp-sm:focus{border-color:var(--red)}
+label.lb{display:block;font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px;margin-bottom:4px}
+.row2{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-bottom:8px}
+.row3{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-bottom:8px}
+/* cards, pills, tables */
+.card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px;box-shadow:var(--shadow)}
+.card-title{font-size:13px;font-weight:700;margin-bottom:12px;display:flex;align-items:center;justify-content:space-between;gap:8px}
+.pill{display:inline-block;font-size:10.5px;font-weight:700;padding:3px 9px;border-radius:99px;letter-spacing:.2px}
+.p-green{background:var(--green-l);color:#166534}.p-amber{background:var(--amber-l);color:#92400e}.p-red{background:var(--red-l);color:#991b1b}.p-blue{background:var(--blue-l);color:#1e40af}.p-grey{background:#eee;color:#555}
+.stats{display:grid;grid-template-columns:repeat(auto-fit,minmax(190px,1fr));gap:12px;margin-bottom:14px}
+.stat{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px 16px;box-shadow:var(--shadow)}
+.stat .t{font-size:11px;font-weight:600;color:var(--muted);text-transform:uppercase;letter-spacing:.4px}
+.stat .n{font-size:24px;font-weight:800;margin-top:4px;letter-spacing:-.5px}
+.stat .s{font-size:11px;color:var(--muted);margin-top:2px}
+.n.red{color:var(--red)}.n.green{color:var(--green)}
+table.tbl{width:100%;border-collapse:collapse}
+.tbl th{font-size:10.5px;text-transform:uppercase;letter-spacing:.4px;color:var(--muted);text-align:left;padding:8px;border-bottom:1.5px solid var(--line);white-space:nowrap}
+.tbl td{padding:8px;border-bottom:1px solid var(--line);font-size:13px;vertical-align:middle}
+.scroll-x{overflow-x:auto}
+/* login */
+.login{min-height:100vh;display:grid;grid-template-columns:1.1fr 1fr}
+.login-art{background:radial-gradient(circle at 20% 10%,#2a0509 0,var(--black) 55%);color:#fff;display:flex;flex-direction:column;justify-content:center;align-items:center;padding:40px;text-align:center}
+.login-art img{height:120px;margin-bottom:18px}
+.login-art h1{font-size:30px;letter-spacing:.5px;font-weight:800}
+.login-art .tag{font-style:italic;color:#ff6b78;margin:4px 0 24px;font-size:16px}
+.login-art ul{list-style:none;font-size:13px;color:#cfd2d8;line-height:2}
+.login-form{display:flex;align-items:center;justify-content:center;padding:30px;background:#fff}
+.login-box{width:100%;max-width:360px}
+.login-box h2{font-size:22px;font-weight:800;margin-bottom:4px}
+.login-err{display:none;background:var(--red-l);color:#991b1b;padding:9px 12px;border-radius:9px;font-size:12.5px;margin-bottom:12px}
+.tiles{display:flex;gap:8px;flex-wrap:wrap;margin:14px 0}
+.tile{border:1.5px solid var(--line);border-radius:10px;padding:8px 12px;cursor:pointer;font-size:12.5px;font-weight:600;transition:.15s}
+.tile small{display:block;font-weight:500;color:var(--muted);font-size:10.5px}
+.tile:hover,.tile.selected{border-color:var(--red);background:var(--red-l)}
+/* topbar */
+.topbar{background:var(--black);color:#fff;height:60px;display:flex;align-items:center;gap:14px;padding:0 18px;border-bottom:3px solid var(--red);position:sticky;top:0;z-index:50}
+.brand{display:flex;align-items:center;gap:10px;min-width:0}
+.brand img{height:38px}
+.brand b{font-size:14px;display:block;line-height:1.1}
+.brand small{font-size:10px;color:#9ca3af;letter-spacing:1px;text-transform:uppercase}
+.nav{display:flex;gap:4px;margin:0 auto;overflow-x:auto}
+.nav button{background:none;border:none;color:#b6bac3;font-size:13px;font-weight:600;padding:8px 13px;border-radius:9px;white-space:nowrap}
+.nav button:hover{background:#1c1c22;color:#fff}
+.nav button.active{background:var(--red);color:#fff}
+.top-right{display:flex;align-items:center;gap:12px}
+.chip{font-size:11px;color:#9ca3af;text-align:right;line-height:1.25}.chip b{display:block;color:#fff;font-size:13px}
+.user{display:flex;align-items:center;gap:8px;font-size:12px;line-height:1.2}
+.avatar{width:32px;height:32px;border-radius:50%;background:var(--red);display:grid;place-items:center;font-weight:800}
+.user small{color:#9ca3af;display:block;font-size:10px}
+.logout{background:#1c1c22;border:none;color:#d1d5db;border-radius:8px;padding:7px 11px;font-size:12px}
+.logout:hover{background:#2a2a32}
+/* POS */
+.pos{display:grid;grid-template-columns:1fr 410px;height:calc(100vh - 63px)}
+.catalog{display:flex;flex-direction:column;min-height:0;padding:14px 16px 0}
+.search{position:relative;margin-bottom:10px}
+.search input{height:42px;padding-left:38px;border-radius:12px}
+.search span{position:absolute;left:12px;top:11px;opacity:.5}
+.cats{display:flex;gap:6px;overflow-x:auto;padding-bottom:8px}
+.cat{padding:7px 14px;border-radius:99px;background:#fff;border:1.5px solid var(--line);font-size:12.5px;font-weight:600;white-space:nowrap;cursor:pointer}
+.cat:hover{border-color:#cbd0d8}.cat.active{background:var(--black);border-color:var(--black);color:#fff}
+.glabel{font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase;letter-spacing:.4px;margin:4px 0 8px}
+.grid{flex:1;overflow-y:auto;display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:10px;align-content:start;padding-bottom:16px}
+.pcard{background:#fff;border:1.5px solid var(--line);border-radius:14px;padding:12px;cursor:pointer;transition:.15s;box-shadow:var(--shadow)}
+.pcard:hover{border-color:var(--red);transform:translateY(-2px)}
+.pcard.out{opacity:.4;pointer-events:none}
+.pc-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:10px}
+.pc-title{font-size:14px;font-weight:700;line-height:1.25;min-height:35px}
+.pc-price{font-size:17px;font-weight:800;color:var(--red);margin-top:6px}
+.stk{font-size:10.5px;font-weight:600;color:var(--muted)}.stk.low{color:var(--amber)}.stk.zero{color:var(--red)}
+.cart{background:#fff;border-left:1px solid var(--line);display:flex;flex-direction:column;min-height:0}
+.cart-head{padding:14px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:center}
+.cart-head h3{font-size:15px;display:flex;align-items:center;gap:8px}
+.count{background:var(--red);color:#fff;font-size:11px;padding:1px 8px;border-radius:99px}
+.cart-scroll{flex:1;overflow-y:auto;padding:12px 16px}
+.empty{text-align:center;color:#b0b5bd;padding:22px 0;font-size:13px}.empty div{font-size:30px}
+.ci{display:flex;align-items:center;gap:8px;padding:8px 0;border-bottom:1px solid var(--line)}
+.ci-info{flex:1;min-width:0}.ci-name{font-size:13px;font-weight:600}.ci-sub{font-size:11px;color:var(--muted)}
+.qty{display:flex;align-items:center;gap:6px}
+.qb{width:24px;height:24px;border-radius:7px;border:1.5px solid var(--line);background:#fff;font-weight:700}.qb:hover{border-color:var(--red);color:var(--red)}
+.ci-total{font-size:13px;font-weight:700;min-width:78px;text-align:right}
+.x{background:none;border:none;color:#c4c8cf;font-size:14px}.x:hover{color:var(--red)}
+.sec{margin-top:14px}.sec-t{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.5px;margin-bottom:8px}
+.cart-foot{border-top:1px solid var(--line);padding:12px 16px;background:#fafafa}
+.tr{display:flex;justify-content:space-between;font-size:13px;color:var(--muted);margin-bottom:4px}
+.tr.grand{font-size:19px;font-weight:800;color:var(--ink);margin:6px 0 10px}
+.pay{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-bottom:8px}
+.pm{border:1.5px solid var(--line);border-radius:10px;padding:8px 4px;text-align:center;font-size:12px;font-weight:600;cursor:pointer;background:#fff}
+.pm div{font-size:17px}.pm.active{border-color:var(--red);background:var(--red-l);color:var(--red-d)}
+.charge{width:100%;height:48px;border-radius:12px;border:none;background:var(--red);color:#fff;font-size:15px;font-weight:800;margin-top:8px}
+.charge:hover:not(:disabled){background:var(--red-d)}.charge:disabled{background:#d1d5db;cursor:not-allowed}
+/* pages */
+.page{padding:20px;max-width:1280px;margin:0 auto}
+.page-h{display:flex;justify-content:space-between;align-items:center;gap:10px;flex-wrap:wrap;margin-bottom:16px}
+.page-h h2{font-size:20px;font-weight:800}.page-h p{font-size:12.5px;color:var(--muted);margin-top:2px}
+.two{display:grid;grid-template-columns:repeat(auto-fit,minmax(340px,1fr));gap:14px;margin-bottom:14px}
+.filters{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:14px;align-items:center}
+.filters .inp{max-width:320px}
+.wgrid{display:grid;grid-template-columns:repeat(auto-fill,minmax(330px,1fr));gap:12px}
+.wcard,.scard{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px;box-shadow:var(--shadow)}
+.wc-top{display:flex;justify-content:space-between;gap:8px;align-items:flex-start}
+.wc-dev{font-size:13px;font-weight:600;margin:8px 0 2px}
+.wc-meta{font-size:11.5px;color:var(--muted);line-height:1.6}
+.acts{display:flex;gap:6px;flex-wrap:wrap;margin-top:10px}
+.claim{background:#f9fafb;border:1px solid var(--line);border-radius:9px;padding:8px 10px;margin-top:8px;font-size:12px}
+.claim .c-top{display:flex;justify-content:space-between;gap:6px;align-items:center;margin-bottom:3px}
+.inline-form{background:#f9fafb;border:1px solid var(--line);border-radius:10px;padding:10px;margin-top:10px}
+.bar-row{display:flex;align-items:center;gap:8px;font-size:12px;margin-bottom:7px}
+.bar-row .lbl{width:78px;color:var(--muted)}.bar-row .bar{flex:1;background:#f0f1f3;border-radius:6px;height:16px;overflow:hidden}
+.bar-row .bar i{display:block;height:100%;background:var(--red);border-radius:6px}.bar-row .val{width:96px;text-align:right;font-weight:700}
+.log{max-height:330px;overflow-y:auto}
+.log-i{display:flex;justify-content:space-between;gap:8px;padding:9px 0;border-bottom:1px solid var(--line)}
+.log-i b{font-size:13px}.log-i small{display:block;color:var(--muted);font-size:11px}
+/* modal */
+.overlay{position:fixed;inset:0;background:rgba(10,10,14,.6);display:none;align-items:center;justify-content:center;z-index:200;padding:14px;backdrop-filter:blur(3px)}
+.overlay.show{display:flex}
+.modal{background:#fff;border-radius:18px;width:380px;max-width:100%;max-height:94vh;overflow-y:auto;box-shadow:0 20px 60px rgba(0,0,0,.35)}
+.m-head{background:linear-gradient(135deg,var(--black),#2a0509);color:#fff;text-align:center;padding:18px 16px;border-bottom:4px solid var(--red)}
+.m-head img{height:60px;display:block;margin:0 auto 6px}
+.m-head b{font-size:16px;letter-spacing:.5px}.m-head small{display:block;color:#cfd2d8;font-size:11px;margin-top:2px}
+.m-body{padding:16px 18px;position:relative;overflow:hidden}
+.m-body>*{position:relative;z-index:1}
+.m-body>.wm{position:absolute;z-index:0;top:50%;left:50%;transform:translate(-50%,-50%);width:70%;opacity:.07;pointer-events:none}
+.m-head,.wm,.m-head img{-webkit-print-color-adjust:exact;print-color-adjust:exact}
+.r-row{display:flex;justify-content:space-between;gap:10px;font-size:13px;padding:3px 0}.r-row .l{color:var(--muted)}
+.dash{border:none;border-top:1.5px dashed var(--line);margin:10px 0}
+.r-dev{background:#f9fafb;border-radius:10px;padding:9px 11px;margin-top:8px}.r-dev-t{font-size:10.5px;font-weight:700;color:var(--muted);text-transform:uppercase;margin-bottom:4px}
+.r-dv{display:flex;justify-content:space-between;font-size:12px;padding:2px 0;gap:8px}.r-dv span:first-child{color:var(--muted)}
+.r-total{display:flex;justify-content:space-between;font-size:18px;font-weight:800;margin-top:6px}
+.r-paid{margin-top:10px;background:var(--green-l);color:#166534;font-weight:700;text-align:center;border-radius:9px;padding:8px;font-size:13px}
+.r-warr{margin-top:8px;background:var(--blue-l);color:#1e40af;border-radius:9px;padding:7px 10px;font-size:12px;text-align:center;font-weight:600}
+.r-foot{font-size:10.5px;color:var(--muted);text-align:center;line-height:1.6;margin-top:10px}
+.m-acts{display:flex;gap:8px;padding:0 18px 16px}.m-acts .btn{flex:1}
+@media (max-width:980px){
+  .login{grid-template-columns:1fr}.login-art{display:none}
+  .pos{grid-template-columns:1fr;height:auto}.catalog{height:70vh}.cart{border-left:none;border-top:1px solid var(--line)}
+  .topbar{height:auto;flex-wrap:wrap;padding:8px 12px}.nav{order:3;width:100%;margin:0}.chip{display:none}
+  .row3{grid-template-columns:1fr 1fr}
+}
+@media print{
+  #login-screen,#app-screen{display:none!important}
+  .overlay.show{position:static;background:none;display:block;backdrop-filter:none;padding:0}
+  .modal{box-shadow:none;width:100%;max-height:none}.m-acts{display:none}
+  body.print-page #app-screen{display:block!important}
+  body.print-page .topbar,body.print-page .no-print{display:none!important}
+  body.print-page .page:not(.print-target){display:none!important}
+  body.print-page .page{padding:0}
+}
+.print-logo{display:none}
+@media print{
+  body.print-80{background:#fff!important}
+  body.print-80 .modal{width:72mm;max-width:72mm;margin:0 auto;border-radius:0;box-shadow:none;overflow:visible;max-height:none}
+  body.print-80 .modal *{color:#000!important;background:none!important;box-shadow:none!important;text-shadow:none!important}
+  body.print-80 .m-head{padding:2mm 0;border-bottom:1px dashed #000;border-radius:0}
+  body.print-80 .m-head>img:not(.print-logo){display:none}
+  body.print-80 .print-logo{display:block;height:18mm;width:auto;margin:0 auto 1mm}
+  body.print-80 .m-head b{font-size:15px}
+  body.print-80 .m-head small{font-size:10px;margin-top:0}
+  body.print-80 .wm{display:none!important}
+  body.print-80 .m-body{padding:2mm 1mm 10mm;font-size:11px}
+  body.print-80 .r-row,body.print-80 .r-dv{font-size:11px;gap:4px;align-items:flex-start}
+  body.print-80 .r-row span:last-child,body.print-80 .r-dv span:last-child{white-space:nowrap}
+  body.print-80 .r-total{font-size:15px;border-top:1px solid #000;padding-top:1mm}
+  body.print-80 .r-dev{border:1px dashed #000;border-radius:0;padding:1mm 2mm}
+  body.print-80 .r-paid,body.print-80 .r-warr{border:1px solid #000;border-radius:0;padding:1mm;font-size:11px}
+  body.print-80 .dash{border-top:1px dashed #000!important}
+  body.print-80 .r-foot{font-size:9.5px}
+}
+</style>
+</head>
+<body>
+
+<!-- ===== LOGIN ===== -->
+<div id="login-screen" class="login">
+  <div class="login-art">
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHYAAAChCAYAAAASnEuGAAAN+UlEQVR42u2de7RVRR3HP/dy7wUuIl0RFXxAavm4CLowfJYPpHwEqK18ZBYVYpqvXIssMxJ8ZUlLeln4Wr6tJFHLsJSWppIUq9QkWRULKRVRIrxeed17bn/MnO5xn5n9OGf2ntn7zHets+DsPWfunv2d38zv95vf/Kapr6+PgqENGAnsBGwBSsAIoAPYKj+rgG3Av+T9duDdIr2EloKRuhkYWONvdwA2FOVFNBeI1O3rIBUp0YVBU8GG4noaM1hKvJfYgqGnSI3xxHpiczHHeniJ9cTmBSVPZ/GI/SAwv846rgGO9+aOO5gKPGSwvk5ghZdY+xiWgvT7odgBmHYDDvTEuoHBhusb44l1A22G6+v2xLqBEYbrK8SKV1EWAb4ph+RuhQRXdt4BwO7y2gCgV9q/zXJubQFOowCLAfUSe6O0/UryxQ6qeJHll9cc+AwG1smX1wL8SNqQHo4QOxpYbdBkebuGaWRfRDRECRE1MUo+U3OI1JYqOlkpILFtwHqgi/gRFe3AeGCIHDG65f83AX/Jq8SaGsebLP7tep7rTODeiDKzgBu88pQvjI1R5jtyuvHEFtA5ch4wJ8sHy7NqfwXwUfqjENcA78g5r7zS01Mxj/bGJKMDmAAsNkgswOwKDd7PsY7jUmBewt/MBq7yQ7HbqMWvPFeaiX4oDsEXgJny/5ulybO1YhjukUNw5ZC8JmD6VP6LrONVWXdagnGxNK3O98SqcQYwMaW6FwKPRpSpJwDuPISz5nN+KK7GZOD5FOodH4NUE4IxHbjVE6vGU4brWwa8kOHzfx642RNbjdcN17fKQhtmAPd4Yt+LdsP1DbbUjk8B93li+7G1QObTGcBP0tKKj4j4TRewEfhkQW3TIZb//kxgb2CSSWK/jViNyBNMm2wuhMYci1g5qnloDg7FJ+ZQwt51vKPUY3IZm2P/7ZWnRG7CrhTb1WWSWI9kcHa/kCe2oGj2bSgmkioKyxCrKMOlydNJ9d6ZJYjF6i5gf2DHnL2T3iJ02CTEPquwcdsQuZTKOBhYHlBsugssGIWYY1U+1KDXZ3nKpohHCsTuEqPM9o63oWGJDXOnfQgR6V+Jjwe+Twh8H5fD4bDH4t+2ojwNQ0S3h2GJnHNbEBF8O3rZcV95iouy58aTapFY1+enkcB2mN8qWURTNDfELgZek/bwOkRweCNhQFGJ/Vjg+9QGI7Y3S3Ffg1gB2k/+OyJgBv0NEZPbLCXtaMxldRnSYMT2aPjaprg+g0C0YxJinwcOVFyv3Oaxf+CeSc9TW4MRqzKlJmjKTgkS25yylmwyo6gutmmj4WdOkqZgUMZa8Ya4nT7tObYFD+dtpfHAqYFrwY2/Jwe+H+m69lhUvpJK1MKI+w9mPOfkBQ8idiwMBI6Tn1QtFj9UposvUZ2m4Hr53h8AprkwFBdhOskSH0Cfe6JHTluz0mprnojN01A8EfhHjHI3AAvS4MavZZrHH4A/Jih/rgvmyHKEq6ucVW0I/YHNvcBSaWutkf+eBBxk6Fm7M3JcdNc5itSSPGQh8IkY2n5HXNs7CbFPAx9O+MDXUeyYJ9WI95sa6nlcQWxmikctXqSixzyZmspetPlgtbju2vGIgwNszrHTEMdydiP8ti30J88aDrwhP13AUMQa6nEJOlgeHRCqZ54KPJywnktsK0+7hdwbJT+NBBWx8xMS2wHs4x0UbkGld4yh2qcehofTeDBPbDpYSPXatApzSGmhpNkRLXa7GGXGONg5w/SCl4Bvhdz/Hf2JM1VYq7i2Ne7I4YrEqjpUMOanK4eSexnqXB23IsKGMrPDbGmmqrlqQAGIBbGDIojDsjawt1lq/KV1DHuum0nrFNc2Z02srVOP5wFPEL7XZ2hOJbZVcW1k1sTa7P3HIiIhj9HcH5JTiW238cyuSGwllmAoO5nDErs+a2LTRtw5fKbi2qacErtFca0la2JNDxEvIZI/7obI+98m/72/hrp0G7M2WuzsHTHK1Hps6dAEHWJQlhJ7CiI89T7Eto9KnCnJXu6ghJVS6gQmBGhT2g8WhSHAoogyryKSkVzpGLE9jhDbHXO+Vj5HGsTuRzLX5BzSjUc2MSfaILY5JtmZSOx84GXF9a8hDrT/K2oX26kOEbvVEWI7Fdd2tiWx1ymu/Re4VkpyJ/Az4HZFuesd0eyzIDaOdTAdsZOx/HlVmoJWiH0j8H0R6v2x06k+luReRyR2myMSG8QoW719peJa2BaGCwPfX3CE2B4KAJOLAH9OWD5pvPG7hu3EMI3eZNm3DJo7sW1lkxK7X8Lyf09YvsXA0BkHSRwecbTU8XXO49YVD1UDZoSUPyvwfXhE/W8akDDTytNlMcr8UnGtPU/Egjh9ohK3Apcrys2len/L6RF176u5vofhNsQ9E/YuojddPw381MY8btoZ/QDVCUiuA36IOKRvI/Bz1KsbX4yo+3Cp8pfoj2PeVMMUEIU4aXhOBz4dUeZZ9FtihueN2PGIxJnB4eftCDv1dOJFw1eq/GNSeidRMb47E72I8Rb684vOIoU44rSHYoBHiL8DoIz7cQdRjva1Meo4RHN9HHC3DXPHFH5L/MVy1/b3hO2WeyLG78egTtrdRjpHosYi1uSkPhPhCpsD7B5hny5whNSbgGc0976LCN+JmopeUVzflWSLC3ULaBYRFLMRG6H7gOc0Zc4lha2ECfEY+qO1pwJfjvj9dPTes5UpP3vJBrGVmIj+7PNxKffqMKwCjtfcGws8FKPz3qG59zIW8kDa2AlwC/rwy/dZInYvzfVBMUaSBcBVIXPyPhk8f8kFYkHkIVZhM9lkc6vEoSH3XopBqi45yM0x5uTCEQti0V2FZxDnlmeBKSHz/iJgzwjSdaReRrg71TR6XSK2E31c1O3A91P++3NR+3FBrBVPi7B1x2runU34LrvCSyzy5elciRelaPc9jj5tz1TgtpDfbgmxvQ8B7rTwHiOJ3WzhoW5Cn+//wBT+3lpgcohmHqUB63IUdyCSd9nA6ihibXmBHgNGa+7tZPhv6TTy0TFGiL1C7v3H0rt7CrggitgO7EG38P4mcIJBZSl2r1dMG6tCntEGXgSOimPHDrNIbCt6z81izGQu0ylLSyN+dwX6JCB3YefwqCWEbDt17Yz2A4B7NPd+gVjLNY37ImzZO4FrNPe+QfS6bBqYD0wKLdHX11f5ObnPDVwUeK7Kz+t11DtcUV8Yngx5jqMsvZs5Ic/0/09TX19fkOvfW/D+qHBKiJ3bV2OdwxCL/mUEDzYOoklzfXvM7/KLgysRq2WRUBFb9gp1OkDuARoP1WGI0JOkaErQSVYD7zfcseodfi+JW1jnoBiLiFOyjRdRr+UupbZ8+tslKNvuEKmzSJhvMczzdAFuhKys0Vx/GPhMwrreIX/4KiLFPKaIBbFB+RYHGvfPEFPjJoqL2dS4WS2Or/iclMyMJNgzxAY9H/0uNJXSkxdcjX6d1wixAKcR7UNNipVS+26VSs0uEU6IkxD7bFWYhDpRVhB5yXh+ubSRa4ZOK9bhUcy4925DHyIzIoKkQ9GvoUY1ppXqgD3db9ah3mictvKkOoQpNYkt40SiowqiMC+EVBB+1zBvTtgKStQeUtdPBrvQBKm1SGwZr1D7npmmmOXCHmwDsIPm3iEh5CexY7OW2OnoA+JSl9gyRoeYIWFIsnXy1yH3OuS0oMJzIcSmfWpJrTjaJKn1EFsruaoVkq/L60HpiNoYfQIiYEwF3VbIQbiH6cCTpiutNzRmdMLyQb/s2VKtnwLcWIPE6ALG2hyQwjiYYlpSTRFbnrfi5h86SDGklrEicC+uDbdrgna5ROwJIba5NeVJhc3EywcRVGA+i8gb+ANF2aWEr5WCCFcJRjboVqiGUu1W1L2A1zSdxsQLOxL9HiEjMKn+D0K4/vaMKLc37z2CM2woOgz4EzDBULtcyG2s6ohODsXBh14dUWZZwjoPRp15JYzE1oRKVVY4NAtS0yAWxBrmxghTZWnCOs8MuVeKoaS5oBVPRu8xywWxIDZX3RnRc59ErHl2oM8RWMbjCdugy23cmqANJs+lPTiiDU7PsSiUItCvmX4koE3/CpG/QgVT8c69FiQ1GI6Ta4mtJDduJMZJqDOnll9OEgww8Owm6tjDBqlZEAsiEmN+zLL7oD4PoMdQu7LUivdCHMtKUYkFEa9zdcyyZxlog20HxQ5Zab+2iQWxcBxHckdoHAtZS2xzHaRuwDKy3kZ5CdHbDDdmrOSZRKcLpNogtqxQLUhI7BZDQ3Gac+zhVPu7rcGWJJwrX75qdUaVYWVwQnuzZKAjJ3Fm6ALbG0piyzgHsYstCNVK0VaH381E10i1TSyIXWxXBq61OuJYaI3xvqZRnZ63oYfiSsyRw+8s+b0jobMgS9u0ctg/mhQiH4oisWV8hf7zyrcknO+yJLaco+M8l0l1iVgQERMrUW+dbHGEWBCRDz923e5yzT7UpYd3KaRlcR4M6mbygR6HJBZPrDkMTXivlJMRquGJ3VTjvXrQ5Ym1i7SyybV5YovZhmb/UtLHCguSdYcnNhtcnOFQvBbhy/bEZoDvoc6HsS6FvzXSz0/Z4hyq8zuZDhbbgwIgjwrCEbz3tKn2BHZs1N6iMVgMQPOan9h+WT4wYpSh9s5FfRiSJzZjjENEAm4w0K7n0aeS98RmjPWI2N31ddbzCHAMBUPD+E5DOvLURmmob5d/AR6eWA9PrAGM9MQWE7qYpDcbhViTWWNcg6phTV5i849OGhhFJnYF4iQQT2wBsYj+LSR3NxKx/wNEllkWhzHlPQAAAABJRU5ErkJggg==" alt="logo">
+    <h1 class="brand-name">Nairobi Gadget Store</h1>
+    <div class="tag">Upgrade Your World</div>
+    <ul><li>✔ 100% original Apple products</li><li>✔ Quality checked &amp; trusted devices</li><li>✔ 6 months software warranty</li></ul>
+  </div>
+  <div class="login-form"><div class="login-box">
+    <h2>Welcome back</h2>
+    <p class="muted" style="font-size:13px;margin-bottom:6px">Sign in to the point of sale</p>
+    <div id="conn-status" style="font-size:12px;margin:8px 0;line-height:1.5"></div>
+    <div id="cfg-warn" class="login-err" style="margin-top:14px">Supabase is not connected yet. Open this file and paste your Project URL and anon key at the top of the script.</div>
+    <div id="login-err" class="login-err">Incorrect username or password.</div>
+    <label class="lb">Username</label>
+    <input class="inp" id="l-user" placeholder="e.g. admin" autocomplete="off" onkeydown="if(event.key==='Enter')document.getElementById('l-pass').focus()">
+    <label class="lb" style="margin-top:10px">Password</label>
+    <input class="inp" type="password" id="l-pass" placeholder="••••••••" onkeydown="if(event.key==='Enter')doLogin()">
+    <button id="login-btn" class="btn btn-primary" style="width:100%;height:44px;margin-top:16px;font-size:14px" onclick="doLogin()">Sign in →</button>
+  </div></div>
+</div>
+
+<!-- ===== APP ===== -->
+<div id="app-screen" class="hidden">
+  <div class="topbar">
+    <div class="brand"><img src="data:image/png;base64,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" alt=""><div><b class="brand-name">Nairobi Gadget Store</b><small>Point of Sale</small></div></div>
+    <div class="nav">
+      <button id="tab-pos" class="active" onclick="switchTab('pos')">🛒 Sales</button>
+      <button id="tab-warranty" onclick="switchTab('warranty')">🛡 Warranty</button>
+      <button id="tab-tradeins" data-admin onclick="switchTab('tradeins')">🔁 Trade-ins</button>
+      <button id="tab-suppliers" data-admin onclick="switchTab('suppliers')">🏭 Suppliers</button>
+      <button id="tab-reports" data-admin onclick="switchTab('reports')">📊 Reports</button>
+      <button id="tab-admin" data-admin onclick="switchTab('admin')">⚙ Admin</button>
+    </div>
+    <div class="top-right">
+      <div class="chip">Today<b id="day-sales">KES 0</b></div>
+      <div class="chip">Sales<b id="day-count">0</b></div>
+      <div class="user"><div class="avatar" id="u-avatar">?</div><div><span id="u-name">—</span><small id="u-role">—</small></div></div>
+      <button class="logout" onclick="doLogout()">Sign out</button>
+    </div>
+  </div>
+
+  <!-- POS -->
+  <div id="pos-page" class="page-wrap">
+    <div class="pos">
+      <div class="catalog">
+        <div class="search"><span>🔍</span><input class="inp" id="search-input" placeholder="Search e.g. 13 pro max, 256GB…" oninput="filterProds(this.value)"></div>
+        <div class="cats" id="cats"></div>
+        <div class="glabel" id="grid-label"></div>
+        <div class="grid" id="products-grid"></div>
+      </div>
+      <div class="cart">
+        <div class="cart-head"><h3>Current sale <span class="count" id="item-count">0</span></h3><button class="btn btn-sm" onclick="clearCart()">✕ Clear</button></div>
+        <div class="cart-scroll">
+          <div id="cart-list"></div>
+          <div class="sec">
+            <div class="sec-t">👤 Customer &amp; device</div>
+            <div class="row2"><div><label class="lb">Customer</label><input class="inp" id="f-customer" placeholder="Full name"></div>
+              <div><label class="lb">Phone</label><input class="inp" id="f-phone" type="tel" placeholder="07xx xxx xxx" onblur="lookupCustomer()"></div></div>
+            <div class="row2" id="dv-imei"><div><label class="lb">IMEI 1</label><input class="inp" id="f-imei1" maxlength="20" inputmode="numeric" placeholder="15 digits"></div>
+              <div><label class="lb">IMEI 2</label><input class="inp" id="f-imei2" maxlength="20" inputmode="numeric" placeholder="If dual"></div></div>
+            <div class="row2" id="dv-serial"><div><label class="lb">Serial no.</label><input class="inp" id="f-serial" placeholder="e.g. F2LXX…"></div>
+              <div><label class="lb">Colour</label><input class="inp" id="f-colour" placeholder="e.g. Black"></div></div>
+            <div class="row2" id="dv-stor"><div><label class="lb">Storage</label><select class="inp" id="f-storage"><option value="">Select</option><option>64GB</option><option>128GB</option><option>256GB</option><option>512GB</option><option>1TB</option><option>N/A</option></select></div>
+              <div><label class="lb">Battery health</label><input class="inp" id="f-battery" placeholder="e.g. 91%"></div></div>
+            <label class="lb">Condition / notes</label><input class="inp" id="f-notes" placeholder="e.g. Quality checked, Grade A">
+            <div style="display:flex;gap:6px;margin-top:10px"><input class="inp" type="number" min="0" id="disc-input" placeholder="Discount (KES)" onkeydown="if(event.key==='Enter')applyDiscount()"><button class="btn" onclick="applyDiscount()">Apply</button></div>
+          </div>
+          <div class="sec" id="ti-sec">
+            <button class="btn btn-sm" id="ti-toggle" onclick="toggleTrade()" style="width:100%">🔁 Add a trade-in (customer gives a phone)</button>
+            <div id="ti-form" class="hidden" style="margin-top:10px;border:1.5px dashed var(--red);border-radius:12px;padding:10px">
+              <div class="sec-t" style="color:var(--red)">🔁 Trade-in phone</div>
+              <div class="row2"><div><label class="lb">Model</label><input class="inp" id="ti-model" list="ti-models" placeholder="e.g. iPhone 11"><datalist id="ti-models"></datalist></div>
+                <div><label class="lb">Storage</label><select class="inp" id="ti-storage"><option value="">Select</option><option>64GB</option><option>128GB</option><option>256GB</option><option>512GB</option><option>1TB</option></select></div></div>
+              <div class="row2"><div><label class="lb">IMEI (15 digits)</label><input class="inp" id="ti-imei" maxlength="20" inputmode="numeric"></div>
+                <div><label class="lb">Serial no.</label><input class="inp" id="ti-serial"></div></div>
+              <div class="row2"><div><label class="lb">Colour</label><input class="inp" id="ti-colour"></div>
+                <div><label class="lb">Battery health</label><input class="inp" id="ti-battery" placeholder="e.g. 85%"></div></div>
+              <label class="lb">Condition / notes</label><input class="inp" id="ti-notes" placeholder="e.g. cracked back, Face ID works">
+              <div class="row2" style="margin-top:8px"><div><label class="lb">Owner name</label><input class="inp" id="ti-seller" placeholder="Same as customer"></div>
+                <div><label class="lb">Owner ID no. (recommended)</label><input class="inp" id="ti-idno"></div></div>
+              <label class="lb">Trade-in value (KES), credited to the customer</label>
+              <input class="inp" type="number" min="0" id="ti-value" placeholder="0" oninput="updateTotals()">
+              <button class="btn btn-sm btn-danger" style="margin-top:8px" onclick="toggleTrade()">Remove trade-in</button>
+            </div>
+          </div>
+        </div>
+        <div class="cart-foot">
+          <div class="tr"><span>Subtotal</span><span id="subtotal">KES 0</span></div>
+          <div class="tr"><span>Discount</span><span id="disc-disp">- KES 0</span></div>
+          <div class="tr hidden" id="ti-row"><span>Trade-in credit</span><span id="ti-disp">- KES 0</span></div>
+          <div class="tr grand"><span>Total</span><span id="grand-total">KES 0</span></div>
+          <div class="pay">
+            <div class="pm active" id="pm-mpesa" onclick="setPay('mpesa')"><div>📲</div>M-Pesa</div>
+            <div class="pm" id="pm-cash" onclick="setPay('cash')"><div>💵</div>Cash</div>
+            <div class="pm" id="pm-card" onclick="setPay('card')"><div>💳</div>Card</div>
+          </div>
+          <div id="stk-wrap" style="margin-bottom:8px">
+            <div style="display:flex;gap:6px"><input class="inp" id="stk-phone" type="tel" placeholder="Customer M-Pesa no. 07XXXXXXXX" style="flex:1"><button class="btn btn-primary" id="stk-btn" onclick="sendStk()" type="button">📲 Send prompt</button></div>
+            <div id="stk-status" style="font-size:12.5px;font-weight:700;margin-top:5px"></div>
+          </div>
+          <div id="ref-wrap"><input class="inp" id="pay-ref" placeholder="M-Pesa code or number e.g. SJK3L9XXXX"></div>
+          <div id="cash-wrap" class="hidden"><input class="inp" type="number" min="0" id="cash-in" placeholder="Amount received (KES)" oninput="updateCash()"><div id="change-line" style="font-size:12.5px;font-weight:700;margin-top:5px"></div></div>
+          <button class="charge" id="charge-btn" onclick="processPayment()" disabled>Charge KES 0</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- WARRANTY -->
+  <div id="warranty-page" class="page hidden">
+    <div class="page-h"><div><h2>🛡 Warranty</h2><p>Every sale is registered automatically. Search by IMEI, serial, name, phone or receipt number.</p></div></div>
+    <div class="stats" id="w-stats"></div>
+    <div class="filters">
+      <input class="inp" id="w-q" placeholder="🔍 Search IMEI / serial / customer / phone / ref" oninput="renderWarranty()">
+      <span id="w-filters"></span>
+    </div>
+    <div class="wgrid" id="w-list"></div>
+  </div>
+
+  <!-- TRADE-INS -->
+  <div id="tradeins-page" class="page hidden">
+    <div class="page-h"><div><h2>🔁 Trade-ins &amp; buy-backs</h2><p>Phones taken in part-exchange at the till, or bought from customers. List them for sale when they are ready.</p></div>
+      <button class="btn btn-primary" onclick="document.getElementById('bb-form').classList.toggle('hidden')">+ Buy a phone</button></div>
+    <div class="stats" id="ti-stats"></div>
+    <div id="bb-form" class="card hidden" style="margin-bottom:14px;border-color:var(--red)">
+      <div class="card-title">Buy a phone from a customer (you pay them)</div>
+      <div class="row3"><div><label class="lb">Model</label><input class="inp" id="bb-model" list="ti-models" placeholder="e.g. iPhone 12"></div>
+        <div><label class="lb">Storage</label><select class="inp" id="bb-storage"><option value="">Select</option><option>64GB</option><option>128GB</option><option>256GB</option><option>512GB</option><option>1TB</option></select></div>
+        <div><label class="lb">IMEI (15 digits)</label><input class="inp" id="bb-imei" maxlength="20" inputmode="numeric"></div></div>
+      <div class="row3"><div><label class="lb">Serial no.</label><input class="inp" id="bb-serial"></div>
+        <div><label class="lb">Colour</label><input class="inp" id="bb-colour"></div>
+        <div><label class="lb">Battery health</label><input class="inp" id="bb-battery"></div></div>
+      <label class="lb">Condition / notes</label><input class="inp" id="bb-notes" style="margin-bottom:8px">
+      <div class="row3"><div><label class="lb">Seller name</label><input class="inp" id="bb-seller"></div>
+        <div><label class="lb">Seller phone</label><input class="inp" id="bb-phone" type="tel"></div>
+        <div><label class="lb">Seller ID no. (recommended)</label><input class="inp" id="bb-idno"></div></div>
+      <div class="row3"><div><label class="lb">Amount paid (KES)</label><input class="inp" id="bb-value" type="number" min="0"></div>
+        <div><label class="lb">Paid by</label><select class="inp" id="bb-method"><option value="cash">Cash</option><option value="mpesa">M-Pesa</option></select></div>
+        <div><label class="lb">M-Pesa reference</label><input class="inp" id="bb-ref" placeholder="if paid by M-Pesa"></div></div>
+      <div style="display:flex;gap:8px"><button class="btn btn-primary" onclick="addBuyback()">Save buy-back</button><button class="btn" onclick="document.getElementById('bb-form').classList.add('hidden')">Cancel</button></div>
+    </div>
+    <div class="filters"><input class="inp" id="ti-q" placeholder="🔍 Search IMEI / model / owner / receipt" oninput="renderTradeIns()"><span id="ti-filters"></span></div>
+    <div class="card"><div class="scroll-x"><table class="tbl" id="ti-table"></table></div></div>
+  </div>
+
+  <!-- SUPPLIERS -->
+  <div id="suppliers-page" class="page hidden">
+    <div id="sup-list-view">
+      <div class="page-h"><div><h2>🏭 Suppliers</h2><p>Each supplier has their own account with a full statement. Open one to record goods, returns and payments.</p></div>
+        <button class="btn btn-primary" onclick="showAddSupplierForm()">+ Add supplier</button></div>
+      <div class="stats" id="sup-stats"></div>
+      <div id="add-supplier-form" class="card hidden" style="margin-bottom:14px;border-color:var(--red)">
+        <div class="card-title">➕ New supplier account</div>
+        <div class="row3"><div><label class="lb">Supplier name</label><input class="inp" id="ns-name"></div><div><label class="lb">Contact person</label><input class="inp" id="ns-contact"></div><div><label class="lb">Phone</label><input class="inp" id="ns-phone" type="tel"></div></div>
+        <div class="row3"><div><label class="lb">Category</label><select class="inp" id="ns-cat"><option>iPhones</option><option>Android</option><option>Accessories</option><option>Laptops</option><option>Mixed</option></select></div>
+          <div><label class="lb">Opening balance we owe (KES)</label><input class="inp" id="ns-open" type="number" min="0" placeholder="0"></div><div><label class="lb">Notes</label><input class="inp" id="ns-notes"></div></div>
+        <div style="display:flex;gap:8px"><button class="btn btn-primary" onclick="addSupplier()">Save supplier</button><button class="btn" onclick="hideAddSupplierForm()">Cancel</button></div>
+      </div>
+      <div class="wgrid" id="supplier-list"></div>
+    </div>
+    <div id="sup-detail-view" class="hidden"></div>
+  </div>
+
+  <!-- REPORTS -->
+  <div id="reports-page" class="page hidden">
+    <div class="page-h no-print"><div><h2>📊 Reports</h2><p>Sales performance, payment methods, top products and profit.</p></div>
+      <div style="display:flex;gap:8px"><select class="inp" id="rp-range" style="width:auto" onchange="renderReports()"><option value="today">Today</option><option value="7">Last 7 days</option><option value="30">Last 30 days</option><option value="month">This month</option><option value="all">All time</option></select>
+      <button class="btn" onclick="exportSalesCSV()">⬇ Export CSV</button><button class="btn btn-dark" onclick="printPage('reports-page')">🖨 Print</button></div></div>
+    <div id="rp-body"></div>
+  </div>
+
+  <!-- ADMIN -->
+  <div id="admin-page" class="page hidden">
+    <div class="page-h"><div><h2>⚙ Admin</h2><p>Users, inventory, sales log, settings and backup.</p></div></div>
+    <div class="stats">
+      <div class="stat"><div class="t">Today's revenue</div><div class="n red" id="a-revenue">KES 0</div><div class="s" id="a-txn"></div></div>
+      <div class="stat"><div class="t">Products</div><div class="n" id="a-prods">0</div><div class="s">in inventory</div></div>
+      <div class="stat"><div class="t">Stock value (cost)</div><div class="n" id="a-stockval">KES 0</div><div class="s">where cost is set</div></div>
+      <div class="stat"><div class="t">Low stock</div><div class="n red" id="a-lowstock">0</div><div class="s" id="a-lowlabel"></div></div>
+      <div class="stat"><div class="t">Active users</div><div class="n" id="a-users">0</div><div class="s">accounts</div></div>
+    </div>
+    <div class="two">
+      <div class="card"><div class="card-title">👥 Users</div><div class="scroll-x"><table class="tbl" id="users-table"></table></div>
+        <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line)"><div class="sec-t">Add new user</div>
+          <div class="row3"><input class="inp" id="new-uname" placeholder="Username"><input class="inp" type="password" id="new-upass" placeholder="Password"><select class="inp" id="new-urole"><option value="cashier">Cashier</option><option value="admin">Admin</option></select></div>
+          <button class="btn btn-primary" onclick="addUser()">+ Add user</button> <button class="btn" onclick="changeMyPassword()">🔑 Change my password</button></div></div>
+      <div class="card"><div class="card-title">🧾 Sales log <input class="inp-sm" id="log-q" placeholder="Search…" oninput="renderSalesLog()" style="width:160px"></div><div class="log" id="sales-log"></div></div>
+    </div>
+    <div class="card" style="margin-bottom:14px">
+      <div class="card-title"><span>📦 Inventory</span><button class="btn btn-danger btn-sm" onclick="resetPriceList()">Reset to price list</button></div>
+      <div class="scroll-x"><table class="tbl" id="prod-table"></table></div>
+      <div style="margin-top:12px;padding-top:12px;border-top:1px solid var(--line)"><div class="sec-t">Add product</div>
+        <div style="display:grid;grid-template-columns:2fr 1.3fr 1fr 1fr 1fr 1fr auto;gap:6px;align-items:end" class="addp">
+          <div><label class="lb">Name</label><input class="inp" id="np-name" placeholder="e.g. iPhone 15 Pro 256GB"></div>
+          <div><label class="lb">Category</label><input class="inp" id="np-cat" list="cat-list" placeholder="iPhone 15"><datalist id="cat-list"></datalist></div>
+          <div><label class="lb">Storage</label><select class="inp" id="np-storage"><option value="">—</option><option>64GB</option><option>128GB</option><option>256GB</option><option>512GB</option><option>1TB</option></select></div>
+          <div><label class="lb">Price</label><input class="inp" type="number" min="0" id="np-price"></div>
+          <div><label class="lb">Cost</label><input class="inp" type="number" min="0" id="np-cost"></div>
+          <div><label class="lb">Stock</label><input class="inp" type="number" min="0" id="np-stock"></div>
+          <button class="btn btn-primary" onclick="addProduct()">+ Add</button></div></div>
+    </div>
+    <div class="two">
+      <div class="card"><div class="card-title">🏪 Store &amp; warranty settings</div>
+        <div class="row2"><div><label class="lb">Store name</label><input class="inp" id="s-store"></div><div><label class="lb">Phone</label><input class="inp" id="s-phone"></div></div>
+        <div class="row2"><div><label class="lb">Address</label><input class="inp" id="s-address"></div><div><label class="lb">Social handle</label><input class="inp" id="s-social"></div></div>
+        <div class="row2"><div><label class="lb">Warranty (months)</label><input class="inp" type="number" min="0" id="s-months"></div><div><label class="lb">Low-stock alert at</label><input class="inp" type="number" min="0" id="s-low"></div></div>
+        <label class="lb">Receipt printing (80mm)</label><select class="inp" id="s-autoprint" style="margin-bottom:8px"><option value="0">Tap Print each time</option><option value="1">Open the print dialog automatically after every sale</option></select>
+        <label class="lb">Warranty terms (printed on warranty card)</label><textarea class="inp" id="s-terms" rows="3"></textarea>
+        <button class="btn btn-primary" style="margin-top:10px" onclick="saveSettings()">Save settings</button></div>
+      <div class="card"><div class="card-title">💾 Backup</div>
+        <p class="muted" style="font-size:12.5px;line-height:1.6;margin-bottom:12px">Your data is stored in Supabase and shared by every device you sign in on. You can also download a copy any time.</p>
+        <div style="display:flex;gap:8px;flex-wrap:wrap"><button class="btn btn-dark" onclick="exportData()">⬇ Download backup</button></div></div>
+    </div>
+  </div>
+</div>
+
+<!-- Receipt modal -->
+<div class="overlay" id="receipt-modal"><div class="modal">
+  <div class="m-head"><img src="data:image/png;base64,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" alt=""><img class="print-logo" alt=""><b class="brand-name">Nairobi Gadget Store</b><small>Upgrade Your World</small><small id="r-date"></small></div>
+  <div class="m-body">
+    <img class="wm" src="data:image/png;base64,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" alt="">
+    <div id="r-customer"></div><hr class="dash"><div id="r-items"></div><div id="r-device"></div><hr class="dash"><div id="r-totals"></div>
+    <div class="r-paid" id="r-pay"></div><div class="r-warr" id="r-warr"></div>
+    <div class="r-foot" id="r-foot"></div>
+  </div>
+  <div class="m-acts"><button class="btn" onclick="print80()">🖨 Print</button><button class="btn" onclick="waR()">💬 WhatsApp</button><button class="btn btn-primary" id="r-close" onclick="newSale()">New sale →</button></div>
+</div></div>
+
+<!-- Warranty card modal -->
+<div class="overlay" id="warranty-modal"><div class="modal">
+  <div class="m-head"><img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAHYAAAChCAYAAAASnEuGAAAN+UlEQVR42u2de7RVRR3HP/dy7wUuIl0RFXxAavm4CLowfJYPpHwEqK18ZBYVYpqvXIssMxJ8ZUlLeln4Wr6tJFHLsJSWppIUq9QkWRULKRVRIrxeed17bn/MnO5xn5n9OGf2ntn7zHets+DsPWfunv2d38zv95vf/Kapr6+PgqENGAnsBGwBSsAIoAPYKj+rgG3Av+T9duDdIr2EloKRuhkYWONvdwA2FOVFNBeI1O3rIBUp0YVBU8GG4noaM1hKvJfYgqGnSI3xxHpiczHHeniJ9cTmBSVPZ/GI/SAwv846rgGO9+aOO5gKPGSwvk5ghZdY+xiWgvT7odgBmHYDDvTEuoHBhusb44l1A22G6+v2xLqBEYbrK8SKV1EWAb4ph+RuhQRXdt4BwO7y2gCgV9q/zXJubQFOowCLAfUSe6O0/UryxQ6qeJHll9cc+AwG1smX1wL8SNqQHo4QOxpYbdBkebuGaWRfRDRECRE1MUo+U3OI1JYqOlkpILFtwHqgi/gRFe3AeGCIHDG65f83AX/Jq8SaGsebLP7tep7rTODeiDKzgBu88pQvjI1R5jtyuvHEFtA5ch4wJ8sHy7NqfwXwUfqjENcA78g5r7zS01Mxj/bGJKMDmAAsNkgswOwKDd7PsY7jUmBewt/MBq7yQ7HbqMWvPFeaiX4oDsEXgJny/5ulybO1YhjukUNw5ZC8JmD6VP6LrONVWXdagnGxNK3O98SqcQYwMaW6FwKPRpSpJwDuPISz5nN+KK7GZOD5FOodH4NUE4IxHbjVE6vGU4brWwa8kOHzfx642RNbjdcN17fKQhtmAPd4Yt+LdsP1DbbUjk8B93li+7G1QObTGcBP0tKKj4j4TRewEfhkQW3TIZb//kxgb2CSSWK/jViNyBNMm2wuhMYci1g5qnloDg7FJ+ZQwt51vKPUY3IZm2P/7ZWnRG7CrhTb1WWSWI9kcHa/kCe2oGj2bSgmkioKyxCrKMOlydNJ9d6ZJYjF6i5gf2DHnL2T3iJ02CTEPquwcdsQuZTKOBhYHlBsugssGIWYY1U+1KDXZ3nKpohHCsTuEqPM9o63oWGJDXOnfQgR6V+Jjwe+Twh8H5fD4bDH4t+2ojwNQ0S3h2GJnHNbEBF8O3rZcV95iouy58aTapFY1+enkcB2mN8qWURTNDfELgZek/bwOkRweCNhQFGJ/Vjg+9QGI7Y3S3Ffg1gB2k/+OyJgBv0NEZPbLCXtaMxldRnSYMT2aPjaprg+g0C0YxJinwcOVFyv3Oaxf+CeSc9TW4MRqzKlJmjKTgkS25yylmwyo6gutmmj4WdOkqZgUMZa8Ya4nT7tObYFD+dtpfHAqYFrwY2/Jwe+H+m69lhUvpJK1MKI+w9mPOfkBQ8idiwMBI6Tn1QtFj9UposvUZ2m4Hr53h8AprkwFBdhOskSH0Cfe6JHTluz0mprnojN01A8EfhHjHI3AAvS4MavZZrHH4A/Jih/rgvmyHKEq6ucVW0I/YHNvcBSaWutkf+eBBxk6Fm7M3JcdNc5itSSPGQh8IkY2n5HXNs7CbFPAx9O+MDXUeyYJ9WI95sa6nlcQWxmikctXqSixzyZmspetPlgtbju2vGIgwNszrHTEMdydiP8ti30J88aDrwhP13AUMQa6nEJOlgeHRCqZ54KPJywnktsK0+7hdwbJT+NBBWx8xMS2wHs4x0UbkGld4yh2qcehofTeDBPbDpYSPXatApzSGmhpNkRLXa7GGXGONg5w/SCl4Bvhdz/Hf2JM1VYq7i2Ne7I4YrEqjpUMOanK4eSexnqXB23IsKGMrPDbGmmqrlqQAGIBbGDIojDsjawt1lq/KV1DHuum0nrFNc2Z02srVOP5wFPEL7XZ2hOJbZVcW1k1sTa7P3HIiIhj9HcH5JTiW238cyuSGwllmAoO5nDErs+a2LTRtw5fKbi2qacErtFca0la2JNDxEvIZI/7obI+98m/72/hrp0G7M2WuzsHTHK1Hps6dAEHWJQlhJ7CiI89T7Eto9KnCnJXu6ghJVS6gQmBGhT2g8WhSHAoogyryKSkVzpGLE9jhDbHXO+Vj5HGsTuRzLX5BzSjUc2MSfaILY5JtmZSOx84GXF9a8hDrT/K2oX26kOEbvVEWI7Fdd2tiWx1ymu/Re4VkpyJ/Az4HZFuesd0eyzIDaOdTAdsZOx/HlVmoJWiH0j8H0R6v2x06k+luReRyR2myMSG8QoW719peJa2BaGCwPfX3CE2B4KAJOLAH9OWD5pvPG7hu3EMI3eZNm3DJo7sW1lkxK7X8Lyf09YvsXA0BkHSRwecbTU8XXO49YVD1UDZoSUPyvwfXhE/W8akDDTytNlMcr8UnGtPU/Egjh9ohK3Apcrys2len/L6RF176u5vofhNsQ9E/YuojddPw381MY8btoZ/QDVCUiuA36IOKRvI/Bz1KsbX4yo+3Cp8pfoj2PeVMMUEIU4aXhOBz4dUeZZ9FtihueN2PGIxJnB4eftCDv1dOJFw1eq/GNSeidRMb47E72I8Rb684vOIoU44rSHYoBHiL8DoIz7cQdRjva1Meo4RHN9HHC3DXPHFH5L/MVy1/b3hO2WeyLG78egTtrdRjpHosYi1uSkPhPhCpsD7B5hny5whNSbgGc0976LCN+JmopeUVzflWSLC3ULaBYRFLMRG6H7gOc0Zc4lha2ECfEY+qO1pwJfjvj9dPTes5UpP3vJBrGVmIj+7PNxKffqMKwCjtfcGws8FKPz3qG59zIW8kDa2AlwC/rwy/dZInYvzfVBMUaSBcBVIXPyPhk8f8kFYkHkIVZhM9lkc6vEoSH3XopBqi45yM0x5uTCEQti0V2FZxDnlmeBKSHz/iJgzwjSdaReRrg71TR6XSK2E31c1O3A91P++3NR+3FBrBVPi7B1x2runU34LrvCSyzy5elciRelaPc9jj5tz1TgtpDfbgmxvQ8B7rTwHiOJ3WzhoW5Cn+//wBT+3lpgcohmHqUB63IUdyCSd9nA6ihibXmBHgNGa+7tZPhv6TTy0TFGiL1C7v3H0rt7CrggitgO7EG38P4mcIJBZSl2r1dMG6tCntEGXgSOimPHDrNIbCt6z81izGQu0ylLSyN+dwX6JCB3YefwqCWEbDt17Yz2A4B7NPd+gVjLNY37ImzZO4FrNPe+QfS6bBqYD0wKLdHX11f5ObnPDVwUeK7Kz+t11DtcUV8Yngx5jqMsvZs5Ic/0/09TX19fkOvfW/D+qHBKiJ3bV2OdwxCL/mUEDzYOoklzfXvM7/KLgysRq2WRUBFb9gp1OkDuARoP1WGI0JOkaErQSVYD7zfcseodfi+JW1jnoBiLiFOyjRdRr+UupbZ8+tslKNvuEKmzSJhvMczzdAFuhKys0Vx/GPhMwrreIX/4KiLFPKaIBbFB+RYHGvfPEFPjJoqL2dS4WS2Or/iclMyMJNgzxAY9H/0uNJXSkxdcjX6d1wixAKcR7UNNipVS+26VSs0uEU6IkxD7bFWYhDpRVhB5yXh+ubSRa4ZOK9bhUcy4925DHyIzIoKkQ9GvoUY1ppXqgD3db9ah3mictvKkOoQpNYkt40SiowqiMC+EVBB+1zBvTtgKStQeUtdPBrvQBKm1SGwZr1D7npmmmOXCHmwDsIPm3iEh5CexY7OW2OnoA+JSl9gyRoeYIWFIsnXy1yH3OuS0oMJzIcSmfWpJrTjaJKn1EFsruaoVkq/L60HpiNoYfQIiYEwF3VbIQbiH6cCTpiutNzRmdMLyQb/s2VKtnwLcWIPE6ALG2hyQwjiYYlpSTRFbnrfi5h86SDGklrEicC+uDbdrgna5ROwJIba5NeVJhc3EywcRVGA+i8gb+ANF2aWEr5WCCFcJRjboVqiGUu1W1L2A1zSdxsQLOxL9HiEjMKn+D0K4/vaMKLc37z2CM2woOgz4EzDBULtcyG2s6ohODsXBh14dUWZZwjoPRp15JYzE1oRKVVY4NAtS0yAWxBrmxghTZWnCOs8MuVeKoaS5oBVPRu8xywWxIDZX3RnRc59ErHl2oM8RWMbjCdugy23cmqANJs+lPTiiDU7PsSiUItCvmX4koE3/CpG/QgVT8c69FiQ1GI6Ta4mtJDduJMZJqDOnll9OEgww8Owm6tjDBqlZEAsiEmN+zLL7oD4PoMdQu7LUivdCHMtKUYkFEa9zdcyyZxlog20HxQ5Zab+2iQWxcBxHckdoHAtZS2xzHaRuwDKy3kZ5CdHbDDdmrOSZRKcLpNogtqxQLUhI7BZDQ3Gac+zhVPu7rcGWJJwrX75qdUaVYWVwQnuzZKAjJ3Fm6ALbG0piyzgHsYstCNVK0VaH381E10i1TSyIXWxXBq61OuJYaI3xvqZRnZ63oYfiSsyRw+8s+b0jobMgS9u0ctg/mhQiH4oisWV8hf7zyrcknO+yJLaco+M8l0l1iVgQERMrUW+dbHGEWBCRDz923e5yzT7UpYd3KaRlcR4M6mbygR6HJBZPrDkMTXivlJMRquGJ3VTjvXrQ5Ym1i7SyybV5YovZhmb/UtLHCguSdYcnNhtcnOFQvBbhy/bEZoDvoc6HsS6FvzXSz0/Z4hyq8zuZDhbbgwIgjwrCEbz3tKn2BHZs1N6iMVgMQPOan9h+WT4wYpSh9s5FfRiSJzZjjENEAm4w0K7n0aeS98RmjPWI2N31ddbzCHAMBUPD+E5DOvLURmmob5d/AR6eWA9PrAGM9MQWE7qYpDcbhViTWWNcg6phTV5i849OGhhFJnYF4iQQT2wBsYj+LSR3NxKx/wNEllkWhzHlPQAAAABJRU5ErkJggg==" alt=""><img class="print-logo" alt=""><b>WARRANTY CERTIFICATE</b><small class="brand-name">Nairobi Gadget Store</small></div>
+  <div class="m-body"><img class="wm" src="data:image/png;base64,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" alt=""><div id="wc-body"></div></div>
+  <div class="m-acts"><button class="btn" onclick="print80()">🖨 Print</button><button class="btn" onclick="waWarranty()">💬 WhatsApp</button><button class="btn btn-primary" onclick="closeWarranty()">Close</button></div>
+</div></div>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script>
+// =====================================================================
+//  1) PASTE YOUR SUPABASE DETAILS HERE  (Supabase → Project Settings → API)
+//     Use the "anon public" key. NEVER paste the "service_role" key.
+// =====================================================================
+const SUPABASE_URL      = 'https://cgtmbuzxsijfxslqkshd.supabase.co';   // e.g. https://abcdxyz.supabase.co
+const SUPABASE_ANON_KEY = 'sb_publishable_OSwr3za6Ac2l2gv6dGt-3A_tsgKym6U';
+// Usernames are turned into this internal email address for Supabase sign-in.
+const EMAIL_DOMAIN = '@pos.example.com';
+// =====================================================================
+
+const CONFIGURED=!SUPABASE_URL.includes('PASTE')&&!SUPABASE_ANON_KEY.includes('PASTE');
+let API_URL=SUPABASE_URL;   // switches to this site's /supabase path if the direct address is blocked
+let sb=(CONFIGURED&&window.supabase)?window.supabase.createClient(API_URL,SUPABASE_ANON_KEY):null;
+
+const PRICE_LIST=[
+  ['iPhone 11',[[128,29000],[256,31000]]],['iPhone 11 Pro',[[256,35000]]],['iPhone 11 Pro Max',[[256,38000]]],
+  ['iPhone 12',[[128,34000],[256,36000]]],['iPhone 12 Pro',[[128,43000],[256,45000]]],['iPhone 12 Pro Max',[[128,49000],[256,51000]]],
+  ['iPhone 13',[[128,43000],[256,46000]]],['iPhone 13 Pro',[[128,57000],[256,60000]]],['iPhone 13 Pro Max',[[128,65000],[256,68000]]],
+  ['iPhone 14',[[128,48000],[256,52000]]],['iPhone 14 Pro',[[128,67000],[256,70000]]],['iPhone 15',[[128,65000],[256,70000]]],
+];
+const ACCESSORIES=[["Covers", 10, [["Silicone Case iPhone 11", 800], ["Silicone Case iPhone 12 / 12 Pro", 900], ["Silicone Case iPhone 13", 900], ["Silicone Case iPhone 14", 1000], ["Silicone Case iPhone 15", 1200], ["Clear Case iPhone 12", 600], ["Clear Case iPhone 13", 600], ["Clear Case iPhone 14", 700], ["Clear Case iPhone 15", 800], ["MagSafe Case iPhone 15", 2500]]], ["Screen Protectors", 20, [["Tempered Glass iPhone 11", 500], ["Tempered Glass iPhone 12", 500], ["Tempered Glass iPhone 13", 500], ["Tempered Glass iPhone 14", 600], ["Tempered Glass iPhone 15", 700], ["Privacy Glass iPhone 14", 1000], ["Camera Lens Protector", 400]]], ["Chargers", 10, [["20W USB-C Power Adapter", 2000], ["USB-C to Lightning Cable 1m", 1500], ["USB-C to USB-C Cable 1m", 1500], ["MagSafe Charger", 4500], ["Car Charger Dual Port", 1200], ["Power Bank 10,000mAh", 3000], ["Wireless Charger Pad 15W", 2000]]], ["Repair Parts", 3, [["iPhone 11 Battery", 3500], ["iPhone 12 Battery", 4000], ["iPhone 13 Battery", 4500], ["iPhone 11 Screen", 7500], ["iPhone 12 Screen", 14000], ["iPhone 13 Screen", 16000], ["Charging Port Flex iPhone 11", 2000], ["Back Glass iPhone 12", 3500]]]];
+function defaultProductRows(){
+  const out=[];PRICE_LIST.forEach(([m,vs])=>vs.forEach(([gb,pr])=>out.push({name:`${m} ${gb}GB`,cat:m.match(/iPhone \d+/)[0],price:pr,cost:0,stock:5,storage:gb+'GB'})));
+  ACCESSORIES.forEach(([cat,stock,items])=>items.forEach(([name,price])=>out.push({name,cat,price,cost:0,stock,storage:''})));return out;
+}
+const defaultSettings=()=>({store:'Nairobi Gadget Store',phone:'0114453515 / 0701932836',address:'Bazzar Plaza, Moi Avenue, 9th Floor, Wing A, Suite A906',social:'@nairobigadgetstore',warrantyMonths:6,lowStock:2,autoPrint:false,
+  terms:'Covers software faults only. Does not cover physical damage, liquid damage or unauthorised repairs. Present this certificate or your receipt when making a claim.'});
+let USERS=[],PRODUCTS=[],SALES=[],SUPPLIERS=[],SETTINGS=defaultSettings();
+let TRADEINS=[],tradeOn=false,tiFilter='all';
+
+// ---------- database helpers ----------
+const toProd=r=>({id:r.id,name:r.name,cat:r.cat,price:+r.price,cost:+r.cost,stock:r.stock,storage:r.storage||''});
+const toSale=r=>({tradeIn:+(r.trade_in_value||0),tradeInDev:r.trade_in||null,ref:r.ref,time:r.sold_at,customer:r.customer,phone:r.phone||'',items:r.items||[],sub:+r.sub,discount:+r.discount,grand:+r.grand,payMethod:r.pay_method,payRef:r.pay_ref||'',
+  tendered:r.tendered==null?null:+r.tendered,change:r.change_due==null?null:+r.change_due,cashier:r.cashier,device:r.device||{},warrantyMonths:r.warranty_months,warrantyEnd:r.warranty_end,claims:r.claims||[],voided:r.voided});
+const toSup=r=>({id:r.id,name:r.name,contact:r.contact||'',phone:r.phone||'',cat:r.cat||'Mixed',notes:r.notes||'',txns:r.txns||[]});
+async function q(p){const r=await p;if(r.error)throw new Error(r.error.message);return r.data;}
+async function fetchAll(table,col,asc){
+  let out=[],from=0;
+  for(;;){const d=await q(sb.from(table).select('*').order(col,{ascending:asc}).range(from,from+999));out=out.concat(d);if(d.length<1000)break;from+=1000;}
+  return out;
+}
+const toTI=r=>({id:r.id,created:r.created_at,kind:r.kind,saleRef:r.sale_ref,model:r.model,storage:r.storage||'',imei:r.imei||'',serial:r.serial||'',colour:r.colour||'',battery:r.battery||'',notes:r.notes||'',
+  sellerName:r.seller_name||'',sellerPhone:r.seller_phone||'',sellerId:r.seller_id_no||'',value:+r.value,payout:r.payout_method,payRef:r.pay_ref||'',status:r.status,productId:r.product_id,by:r.recorded_by||''});
+const loadTradeIns=async()=>{TRADEINS=(await fetchAll('trade_ins','id',false)).map(toTI);};
+const loadProducts=async()=>{PRODUCTS=(await fetchAll('products','id',true)).map(toProd);};
+const loadSales=async()=>{SALES=(await fetchAll('sales','sold_at',false)).map(toSale);};
+const loadSuppliers=async()=>{SUPPLIERS=(await fetchAll('suppliers','id',true)).map(toSup);};
+const loadProfiles=async()=>{USERS=await q(sb.from('profiles').select('*').order('created_at',{ascending:true}));};
+const loadSettings=async()=>{const d=await q(sb.from('settings').select('*').eq('id',1).maybeSingle());SETTINGS={...defaultSettings(),...(d?.data||{})};};
+function fail(e){console.error(e);alert('Error: '+(e?.message||e));}
+
+let currentUser=null,cart=[],discount=0,payMethod='mpesa',searchVal='',activeCat='All',currentReceipt=null,currentWarrantyRef=null,curSup=null,wFilter='all',curTab='pos',busy=false;
+const $=id=>document.getElementById(id);
+const gv=id=>$(id)?.value?.trim()||'';
+const fmt=n=>'KES '+Math.round(n||0).toLocaleString();
+const esc=s=>String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+const prodById=id=>PRODUCTS.find(x=>x.id===id);
+const isAdmin=()=>currentUser?.role==='admin';
+const ymd=d=>{d=new Date(d);return d.getFullYear()+'-'+String(d.getMonth()+1).padStart(2,'0')+'-'+String(d.getDate()).padStart(2,'0');};
+const today=()=>ymd(new Date());
+const fdate=iso=>new Date(iso).toLocaleDateString('en-KE',{day:'2-digit',month:'short',year:'numeric'});
+const fdt=iso=>new Date(iso).toLocaleString('en-KE',{dateStyle:'medium',timeStyle:'short'});
+const addMonths=(iso,m)=>{const d=new Date(iso);d.setMonth(d.getMonth()+m);return d.toISOString();};
+const titleOf=p=>(p.storage?p.name.replace(p.storage,''):p.name).replace(/\s+/g,' ').trim();
+const todaySales=()=>SALES.filter(s=>!s.voided&&ymd(s.time)===today());
+function normPhone(p){let d=(p||'').replace(/\D/g,'');if(!d)return '';if(d.startsWith('254'))return d;if(d.startsWith('0'))return '254'+d.slice(1);if(d.length===9)return '254'+d;return d;}
+function download(name,text,mime){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([text],{type:mime}));a.download=name;document.body.appendChild(a);a.click();setTimeout(()=>{URL.revokeObjectURL(a.href);a.remove();},500);}
+function printPage(id){const el=$(id);document.body.classList.add('print-page');el.classList.add('print-target');window.print();setTimeout(()=>{document.body.classList.remove('print-page');el.classList.remove('print-target');},400);}
+function cats(){return ['All',...new Set(PRODUCTS.map(p=>p.cat))];}
+function refreshStats(){const t=todaySales();$('day-sales').textContent=fmt(t.reduce((a,s)=>a+s.grand,0));$('day-count').textContent=t.length;}
+function applyBrand(){document.title=SETTINGS.store+' · POS';document.querySelectorAll('.brand-name').forEach(e=>e.textContent=SETTINGS.store);}
+
+// ================= LOGIN / SESSION =================
+function showLoginErr(msg){const e=$('login-err');e.textContent=msg;e.style.display='block';}
+async function doLogin(){
+  if(!sb){return;}
+  const un=$('l-user').value.trim().toLowerCase(),pw=$('l-pass').value;
+  if(!un||!pw){showLoginErr('Enter your username and password.');return;}
+  const btn=$('login-btn');btn.disabled=true;btn.textContent='Signing in…';
+  try{
+    const r=await sb.auth.signInWithPassword({email:un.includes('@')?un:un+EMAIL_DOMAIN,password:pw});
+    if(r.error){showLoginErr(/fetch|network/i.test(r.error.message)?'Cannot reach Supabase ('+r.error.message+'). See the connection note above.':'Incorrect username or password. (Supabase says: '+r.error.message+')');return;}
+    await enterApp(r.data.user);
+  }catch(e){showLoginErr('Could not sign in: '+e.message+(/fetch|network/i.test(e.message)?' — the page cannot reach Supabase.':''));}
+  finally{btn.disabled=false;btn.textContent='Sign in →';}
+}
+async function enterApp(user){
+  const pr=await sb.from('profiles').select('*').eq('id',user.id).maybeSingle();
+  if(pr.error||!pr.data){await sb.auth.signOut();showLoginErr('No profile found for this login. Ask the admin.');return;}
+  if(!pr.data.active){await sb.auth.signOut();showLoginErr('Your account is not active yet. Ask the admin to activate it.');return;}
+  currentUser=pr.data;
+  await Promise.all([loadSettings(),loadProducts(),loadSales()]);
+  applyBrand();
+  $('login-err').style.display='none';
+  $('login-screen').classList.add('hidden');$('app-screen').classList.remove('hidden');
+  $('u-avatar').textContent=currentUser.name[0].toUpperCase();$('u-name').textContent=currentUser.name;$('u-role').textContent=isAdmin()?'Administrator':'Cashier';
+  document.querySelectorAll('[data-admin]').forEach(b=>b.classList.toggle('hidden',!isAdmin()));
+  $('l-pass').value='';
+  await switchTab('pos');renderCart();refreshStats();subscribeRealtime();
+}
+function forceLogout(){
+  currentUser=null;searchVal='';activeCat='All';curSup=null;clearCart();$('search-input').value='';
+  USERS=[];SALES=[];PRODUCTS=[];SUPPLIERS=[];
+  $('app-screen').classList.add('hidden');$('login-screen').classList.remove('hidden');$('l-user').value='';$('l-pass').value='';
+}
+async function doLogout(){
+  if(cart.length&&!confirm('There are items in the current sale. Sign out and discard them?'))return;
+  try{if(rt){await sb.removeChannel(rt);rt=null;}await sb.auth.signOut();}catch(e){}
+  forceLogout();
+}
+async function changeMyPassword(){
+  const p=prompt('Choose a new password (at least 6 characters):');if(p===null)return;
+  if(p.trim().length<6){alert('Password must be at least 6 characters.');return;}
+  try{const r=await sb.auth.updateUser({password:p.trim()});if(r.error)throw r.error;alert('Password changed.');}catch(e){fail(e);}
+}
+const PAGES=['pos','warranty','tradeins','suppliers','reports','admin'];
+async function switchTab(t){
+  if(['admin','suppliers','reports','tradeins'].includes(t)&&!isAdmin())return;
+  try{
+    if(t==='warranty'||t==='reports')await loadSales();
+    if(t==='reports')await loadTradeIns();
+    if(t==='tradeins')await Promise.all([loadTradeIns(),loadProducts()]);
+    if(t==='suppliers'){curSup=null;await loadSuppliers();}
+    if(t==='admin')await Promise.all([loadProfiles(),loadSales(),loadProducts()]);
+  }catch(e){fail(e);}
+  curTab=t;
+  PAGES.forEach(n=>{$(n+'-page').classList.toggle('hidden',t!==n);$('tab-'+n).classList.toggle('active',t===n);});
+  if(t==='pos'){renderCats();renderProds();}
+  if(t==='warranty')renderWarranty();
+  if(t==='tradeins')renderTradeIns();
+  if(t==='suppliers')renderSuppliers();
+  if(t==='reports')renderReports();
+  if(t==='admin')renderAdmin();
+}
+
+// ---------- live updates from other devices ----------
+let rt=null,rtTimer=null;
+function subscribeRealtime(){
+  if(rt||!sb)return;
+  try{
+    rt=sb.channel('ngs-live')
+      .on('postgres_changes',{event:'*',schema:'public',table:'products'},liveRefresh)
+      .on('postgres_changes',{event:'*',schema:'public',table:'sales'},liveRefresh).subscribe();
+  }catch(e){}
+}
+function liveRefresh(){
+  clearTimeout(rtTimer);
+  rtTimer=setTimeout(async()=>{
+    try{
+      if(!currentUser)return;
+      await Promise.all([loadProducts(),loadSales()]);refreshStats();
+      if(curTab==='pos'){renderCats();renderProds();}
+      else if(curTab==='warranty'&&!document.querySelector('#w-list .inline-form:not(.hidden)'))renderWarranty();
+      else if(curTab==='reports')renderReports();
+    }catch(e){}
+  },400);
+}
+
+// ================= POS =================
+function renderCats(){
+  if(!cats().includes(activeCat))activeCat='All';
+  $('cats').innerHTML=cats().map(c=>`<div class="cat${c===activeCat?' active':''}" data-c="${esc(c)}" onclick="switchCat(this.dataset.c)">${esc(c)}</div>`).join('');
+}
+function switchCat(c){activeCat=c;renderCats();renderProds();}
+function filterProds(v){searchVal=v;renderProds();}
+function renderProds(){
+  const q=searchVal.toLowerCase().trim();
+  const list=PRODUCTS.filter(p=>(activeCat==='All'||p.cat===activeCat)&&(!q||p.name.toLowerCase().includes(q)));
+  $('grid-label').textContent=list.length+' product'+(list.length!==1?'s':'')+(activeCat!=='All'?' · '+activeCat:'');
+  $('products-grid').innerHTML=list.length?list.map(p=>{
+    const st=p.stock<=0?'<span class="stk zero">Out of stock</span>':p.stock<=SETTINGS.lowStock?`<span class="stk low">⚠ ${p.stock} left</span>`:`<span class="stk">${p.stock} in stock</span>`;
+    return `<div class="pcard${p.stock<=0?' out':''}" onclick="addToCart(${p.id})"><div class="pc-top">${p.storage?`<span class="pill p-blue">${esc(p.storage)}</span>`:'<span></span>'}${st}</div><div class="pc-title">${esc(titleOf(p))}</div><div class="pc-price">${fmt(p.price)}</div></div>`;
+  }).join(''):'<div class="empty" style="grid-column:1/-1">No products found</div>';
+}
+function addToCart(id){
+  const p=prodById(id);if(!p||p.stock<=0)return;
+  const ex=cart.find(x=>x.id===id);
+  if(ex){if(ex.qty>=p.stock){alert('Only '+p.stock+' in stock for '+p.name);return;}ex.qty++;}else cart.push({id,qty:1});
+  if(p.storage)$('f-storage').value=p.storage;
+  renderCart();
+}
+function removeFromCart(id){cart=cart.filter(x=>x.id!==id);renderCart();}
+function changeQty(id,d){
+  const it=cart.find(x=>x.id===id),p=prodById(id);if(!it||!p)return;
+  it.qty+=d;if(it.qty<=0){removeFromCart(id);return;}
+  if(it.qty>p.stock){it.qty=p.stock;alert('Only '+p.stock+' in stock for '+p.name);}
+  renderCart();
+}
+function cartLines(){cart=cart.filter(c=>prodById(c.id));return cart.map(c=>{const p=prodById(c.id);return{id:c.id,name:p.name,price:p.price,cost:p.cost||0,qty:c.qty};});}
+function renderCart(){
+  const lines=cartLines();
+  $('item-count').textContent=lines.reduce((a,b)=>a+b.qty,0);
+  $('cart-list').innerHTML=lines.length?lines.map(i=>`<div class="ci"><div class="ci-info"><div class="ci-name">${esc(i.name)}</div><div class="ci-sub">${fmt(i.price)} each</div></div>
+    <div class="qty"><button class="qb" onclick="changeQty(${i.id},-1)">−</button><b>${i.qty}</b><button class="qb" onclick="changeQty(${i.id},1)">+</button></div>
+    <div class="ci-total">${fmt(i.price*i.qty)}</div><button class="x" onclick="removeFromCart(${i.id})">✕</button></div>`).join(''):'<div class="empty"><div>🛒</div>Tap a product to add it</div>';
+  updateDeviceFields();updateTotals();
+}
+const ACC_CATS=['Covers','Screen Protectors','Chargers','Repair Parts'];
+function saleKind(){
+  const ps=cartLines().map(l=>prodById(l.id)).filter(Boolean);
+  if(!ps.length||ps.some(p=>!ACC_CATS.includes(p.cat)))return 'phone';
+  return ps.some(p=>p.cat==='Repair Parts')?'repair':'acc';
+}
+function updateDeviceFields(){
+  const k=saleKind();
+  $('dv-imei').classList.toggle('hidden',k==='acc');
+  $('dv-serial').classList.toggle('hidden',k==='acc');
+  $('dv-stor').classList.toggle('hidden',k!=='phone');
+  $('f-imei1').placeholder=k==='repair'?'Phone being repaired (optional)':'15 digits';
+  if(k!=='phone')['f-storage','f-battery'].forEach(id=>{$(id).value='';});
+  if(k==='acc')['f-imei1','f-imei2','f-serial','f-colour'].forEach(id=>{$(id).value='';});
+}
+function tradeValue(){return tradeOn?Math.max(0,parseFloat($('ti-value').value)||0):0;}
+function calc(){const sub=cartLines().reduce((a,b)=>a+b.price*b.qty,0);const disc=Math.min(discount,sub);const trade=Math.min(tradeValue(),Math.max(0,sub-disc));return{sub,disc,trade,grand:Math.max(0,sub-disc-trade)};}
+function toggleTrade(){
+  tradeOn=!tradeOn;
+  $('ti-form').classList.toggle('hidden',!tradeOn);$('ti-toggle').classList.toggle('hidden',tradeOn);
+  if(!tradeOn)['ti-model','ti-storage','ti-imei','ti-serial','ti-colour','ti-battery','ti-notes','ti-seller','ti-idno','ti-value'].forEach(id=>{$(id).value='';});
+  else $('ti-model').focus();
+  updateTotals();
+}
+function updateTotals(){
+  const{sub,disc,trade,grand}=calc();
+  $('subtotal').textContent=fmt(sub);$('disc-disp').textContent='- '+fmt(disc);$('grand-total').textContent=fmt(grand);
+  $('ti-row').classList.toggle('hidden',!(trade>0));$('ti-disp').textContent='- '+fmt(trade);
+  $('charge-btn').textContent='Charge '+fmt(grand);$('charge-btn').disabled=cart.length===0||busy;updateCash();
+}
+function applyDiscount(){
+  const v=parseFloat($('disc-input').value)||0;
+  if(v<0){alert('Discount cannot be negative');return;}
+  const sub=calc().sub;
+  if(v>sub){alert('Discount cannot be more than the subtotal ('+fmt(sub)+')');discount=sub;$('disc-input').value=sub;}else discount=v;
+  updateTotals();
+}
+function clearCart(){
+  cart=[];discount=0;if(tradeOn)toggleTrade();
+  ['disc-input','f-customer','f-phone','f-imei1','f-imei2','f-serial','f-colour','f-battery','f-notes','pay-ref','cash-in','stk-phone'].forEach(id=>{if($(id))$(id).value='';});window._stk=null;if($('stk-status'))$('stk-status').textContent='';if($('stk-btn'))$('stk-btn').disabled=false;
+  $('f-storage').value='';renderCart();
+}
+function lookupCustomer(){
+  const ph=normPhone(gv('f-phone'));if(!ph||gv('f-customer'))return;
+  const s=SALES.find(x=>normPhone(x.phone)===ph&&x.customer&&x.customer!=='Walk-in Customer');
+  if(s)$('f-customer').value=s.customer;
+}
+function setPay(m){
+  payMethod=m;['mpesa','cash','card'].forEach(x=>$('pm-'+x).classList.toggle('active',x===m));
+  $('ref-wrap').classList.toggle('hidden',m==='cash');$('stk-wrap').classList.toggle('hidden',m!=='mpesa');$('cash-wrap').classList.toggle('hidden',m!=='cash');
+  $('pay-ref').placeholder=m==='mpesa'?'M-Pesa code or number e.g. SJK3L9XXXX':'Card approval code (optional)';updateCash();
+}
+function updateCash(){
+  const el=$('change-line');if(payMethod!=='cash'){el.textContent='';return;}
+  const v=parseFloat($('cash-in').value),g=calc().grand;
+  if(isNaN(v)){el.textContent='';return;}
+  if(v>=g){el.style.color='var(--green)';el.textContent='Change: '+fmt(v-g);}else{el.style.color='var(--red)';el.textContent='Short by '+fmt(g-v);}
+}
+// ================= M-PESA STK PUSH =================
+const MPESA_FN='/.netlify/functions';   // if this POS is NOT hosted on Netlify, put your Netlify site URL here e.g. 'https://yoursite.netlify.app/.netlify/functions'
+window._stk=null;
+async function sendStk(){
+  const st=$('stk-status'),btn=$('stk-btn');
+  const amount=Math.round(calc().grand);
+  if(!amount||amount<1){st.style.color='var(--red)';st.textContent='Add items to the cart first.';return;}
+  const phone=($('stk-phone').value||gv('f-phone')||'').trim();
+  if(!phone){st.style.color='var(--red)';st.textContent='Enter the customer\'s M-Pesa number.';$('stk-phone').focus();return;}
+  btn.disabled=true;st.style.color='var(--amber)';st.textContent='Sending prompt…';
+  try{
+    const{data:{session}}=await sb.auth.getSession();
+    if(!session)throw new Error('Please sign in again.');
+    const r=await fetch(MPESA_FN+'/stk-push',{method:'POST',headers:{'Content-Type':'application/json',Authorization:'Bearer '+session.access_token},
+      body:JSON.stringify({phone,amount,reference:'POS'+Date.now().toString().slice(-8)})});
+    const d=await r.json();
+    if(!r.ok)throw new Error(d.error||'Could not send the prompt');
+    st.textContent='Prompt sent. Ask the customer to enter their M-Pesa PIN…';
+    const t0=Date.now();
+    while(Date.now()-t0<90000){
+      await new Promise(res=>setTimeout(res,3000));
+      const{data}=await sb.from('payments').select('status,mpesa_receipt,result_desc,paid_amount').eq('checkout_request_id',d.checkoutRequestId).maybeSingle();
+      if(!data||data.status==='pending')continue;
+      if(data.status==='paid'){
+        window._stk={receipt:data.mpesa_receipt,amount};
+        $('pay-ref').value=data.mpesa_receipt||'';
+        st.style.color='var(--green)';st.textContent='✔ Paid '+fmt(amount)+' · '+(data.mpesa_receipt||'')+' — now tap Charge to complete the sale.';
+        return;
+      }
+      throw new Error(data.status==='cancelled'?'Customer cancelled the prompt.':(data.result_desc||'Payment failed.'));
+    }
+    throw new Error('No response yet. Check the phone, or retry. If the customer already paid, type the M-Pesa code below.');
+  }catch(e){st.style.color='var(--red)';st.textContent=e.message;btn.disabled=false;}
+}
+async function processPayment(){
+  if(busy)return;
+  const lines=cartLines();if(!lines.length)return;
+  for(const l of lines){const p=prodById(l.id);if(!p||l.qty>p.stock){alert('Not enough stock for '+l.name);renderCart();renderProds();return;}}
+  const{grand,trade}=calc();
+  const imei1=gv('f-imei1'),imei2=gv('f-imei2'),serial=gv('f-serial');
+  if([imei1,imei2].some(x=>x&&!/^\d{15}$/.test(x))){alert('IMEI must be exactly 15 digits (numbers only). Please check the IMEI field(s).');return;}
+  if(saleKind()==='phone'&&!imei1&&!serial&&!confirm('No IMEI or serial number entered. Continue with the sale anyway?'))return;
+  let tradeIn=null;
+  if(tradeOn){
+    const tv=tradeValue();
+    if(!gv('ti-model')){alert('Trade-in: enter the phone model.');$('ti-model').focus();return;}
+    if(!/^\d{15}$/.test(gv('ti-imei'))){alert('Trade-in: the IMEI must be exactly 15 digits.');$('ti-imei').focus();return;}
+    if(tv<=0){alert('Trade-in: enter the trade-in value.');$('ti-value').focus();return;}
+    if(tv>calc().sub-calc().disc){alert('The trade-in value ('+fmt(tv)+') is more than the amount due ('+fmt(calc().sub-calc().disc)+'). Lower the value, or record the extra as a separate buy-back.');return;}
+    tradeIn={model:gv('ti-model'),storage:gv('ti-storage'),imei:gv('ti-imei'),serial:gv('ti-serial'),colour:gv('ti-colour'),battery:gv('ti-battery'),notes:gv('ti-notes'),
+      seller_name:gv('ti-seller')||gv('f-customer'),seller_phone:gv('f-phone'),seller_id_no:gv('ti-idno'),value:tv};
+  }
+  const ref=gv('pay-ref');let tendered=null;
+  if(payMethod==='mpesa'&&!ref&&grand>0){alert('Enter the M-Pesa transaction code or number.');$('pay-ref').focus();return;}
+  if(payMethod==='cash'){const v=parseFloat($('cash-in').value);if(!isNaN(v)){if(v<grand){alert('Amount received is less than the total ('+fmt(grand)+').');return;}tendered=v;}}
+  if(payMethod==='mpesa'&&window._stk&&window._stk.receipt===ref&&window._stk.amount!==Math.round(grand)&&!confirm('The customer paid '+fmt(window._stk.amount)+' but the total is now '+fmt(grand)+'. Continue anyway?'))return;
+  busy=true;updateTotals();$('charge-btn').textContent='Saving sale…';
+  try{
+    const row=await q(sb.rpc('create_sale',{p:{
+      customer:gv('f-customer'),phone:gv('f-phone'),items:lines.map(l=>({id:l.id,qty:l.qty})),discount:calc().disc,
+      pay_method:payMethod,pay_ref:ref,tendered,trade_in:tradeIn,
+      device:{imei1,imei2,serial,colour:gv('f-colour'),storage:gv('f-storage'),battery:gv('f-battery'),notes:gv('f-notes')}}}));
+    const sale=toSale(row);SALES.unshift(sale);
+    await loadProducts();
+    refreshStats();renderProds();showReceipt(sale,true);
+    if(SETTINGS.autoPrint)setTimeout(print80,300);
+  }catch(e){fail(e);try{await loadProducts();renderProds();renderCart();}catch(_){}}
+  finally{busy=false;updateTotals();}
+}
+
+// ================= RECEIPT =================
+const wEnd=s=>s.warrantyEnd||addMonths(s.time,s.warrantyMonths??SETTINGS.warrantyMonths);
+const daysLeft=s=>Math.ceil((new Date(wEnd(s))-Date.now())/86400000);
+function footHTML(){return `✔ 100% original Apple products<br>${esc(SETTINGS.address)}<br>Call/Text/WhatsApp: ${esc(SETTINGS.phone)}<br>${esc(SETTINGS.social)}`;}
+function showReceipt(s,isNew){
+  currentReceipt=s;const d=s.device||{};
+  $('r-date').textContent=fdt(s.time)+' · '+s.cashier;
+  $('r-customer').innerHTML=`<div class="r-row"><span class="l">Customer</span><b>${esc(s.customer)}</b></div>${s.phone?`<div class="r-row"><span class="l">Phone</span><span>${esc(s.phone)}</span></div>`:''}`;
+  $('r-items').innerHTML=s.items.map(i=>`<div class="r-row"><span>${esc(i.name)} ×${i.qty}</span><span>${fmt(i.price*i.qty)}</span></div>`).join('');
+  const rows=[['IMEI 1',d.imei1],['IMEI 2',d.imei2],['Serial No.',d.serial],['Colour',d.colour],['Storage',d.storage],['Battery health',d.battery],['Condition',d.notes]].filter(r=>r[1]);
+  $('r-device').innerHTML=rows.length?`<div class="r-dev"><div class="r-dev-t">📱 Device information</div>${rows.map(r=>`<div class="r-dv"><span>${r[0]}</span><span>${esc(r[1])}</span></div>`).join('')}</div>`:'';
+  $('r-totals').innerHTML=((s.discount>0||s.tradeIn>0)?`<div class="r-row"><span class="l">Subtotal</span><span>${fmt(s.sub)}</span></div>`:'')+(s.discount>0?`<div class="r-row"><span class="l">Discount</span><span style="color:var(--amber)">- ${fmt(s.discount)}</span></div>`:'')+(s.tradeIn>0?`<div class="r-row"><span class="l">Trade-in credit</span><span>- ${fmt(s.tradeIn)}</span></div><div class="r-row" style="font-size:11px"><span class="l">${esc(s.tradeInDev?.model||'')} ${esc(s.tradeInDev?.storage||'')} · IMEI ${esc(s.tradeInDev?.imei||'')}</span><span></span></div>`:'')+
+    `<div class="r-total"><span>Total paid</span><span>${fmt(s.grand)}</span></div>`+
+    (s.tendered!=null?`<div class="r-row" style="margin-top:6px"><span class="l">Cash received</span><span>${fmt(s.tendered)}</span></div><div class="r-row"><span class="l">Change</span><span>${fmt(s.change)}</span></div>`:'');
+  const lab=s.payMethod==='mpesa'?`M-Pesa${s.payRef?' ('+esc(s.payRef)+')':''}`:s.payMethod==='cash'?'Cash':`Card${s.payRef?' ('+esc(s.payRef)+')':''}`;
+  $('r-pay').innerHTML=s.voided?'✕ VOIDED SALE':'✓ Paid via '+lab;
+  $('r-pay').style.background=s.voided?'#eee':'';$('r-pay').style.color=s.voided?'#888':'';
+  const m=s.warrantyMonths??SETTINGS.warrantyMonths;
+  $('r-warr').innerHTML=m>0?`🛡 ${m}-month software warranty · valid until <b>${fdate(wEnd(s))}</b>`:'';
+  $('r-warr').classList.toggle('hidden',!(m>0));
+  $('r-foot').innerHTML=`Ref: ${s.ref} · Thank you for shopping with us!<br>`+footHTML();
+  $('r-close').textContent=isNew?'New sale →':'Close';
+  $('receipt-modal').classList.add('show');
+}
+function newSale(){const isNew=$('r-close').textContent.startsWith('New');$('receipt-modal').classList.remove('show');if(isNew)clearCart();}
+function waR(){
+  const s=currentReceipt;if(!s)return;const d=s.device||{};
+  let msg=`*${SETTINGS.store.toUpperCase()}*\nReceipt ${s.ref}\nCustomer: ${s.customer}\n\n`+s.items.map(i=>`• ${i.name} x${i.qty} — ${fmt(i.price*i.qty)}`).join('\n');
+  if(s.discount>0)msg+=`\n\nDiscount: -${fmt(s.discount)}`;
+  if(s.tradeIn>0)msg+=`\nTrade-in (${s.tradeInDev?.model||''} ${s.tradeInDev?.storage||''}): -${fmt(s.tradeIn)}`;
+  msg+=`\nTotal: *${fmt(s.grand)}*`;
+  if(d.imei1)msg+=`\nIMEI: ${d.imei1}`;if(d.imei2)msg+=`\nIMEI 2: ${d.imei2}`;if(d.serial)msg+=`\nSerial: ${d.serial}`;
+  msg+=`\n\n🛡 Warranty valid until ${fdate(wEnd(s))}\nThank you! 🙏\n${SETTINGS.address}\n${SETTINGS.phone}`;
+  window.open(`https://wa.me/${normPhone(s.phone)}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+// ---------- 80mm thermal printing ----------
+function print80(){
+  const logo=document.querySelector('.overlay.show .wm')?.src;
+  document.querySelectorAll('.print-logo').forEach(i=>{if(logo)i.src=logo;});
+  const st=document.createElement('style');st.id='pg80';st.textContent='@page{size:80mm auto;margin:0}';document.head.appendChild(st);
+  document.body.classList.add('print-80');
+  const done=()=>{document.body.classList.remove('print-80');st.remove();window.removeEventListener('afterprint',done);};
+  window.addEventListener('afterprint',done);
+  setTimeout(done,120000);
+  window.print();
+}
+
+// ================= WARRANTY =================
+function wStatus(s){
+  if(s.voided)return{k:'void',l:'Void',c:'p-grey'};
+  if((s.claims||[]).some(c=>c.status==='open'))return{k:'claim',l:'Claim open',c:'p-blue'};
+  const d=daysLeft(s);
+  if(d<0)return{k:'expired',l:'Expired',c:'p-red'};
+  if(d<=30)return{k:'expiring',l:'Expiring soon',c:'p-amber'};
+  return{k:'active',l:'Active',c:'p-green'};
+}
+const W_FILTERS=[['all','All'],['active','Active'],['expiring','Expiring ≤30d'],['expired','Expired'],['claim','Open claims']];
+function setWFilter(k){wFilter=k;renderWarranty();}
+function renderWarranty(){
+  const all=SALES.filter(s=>!s.voided);
+  const cnt=k=>all.filter(s=>wStatus(s).k===k).length;
+  $('w-stats').innerHTML=`<div class="stat"><div class="t">Active warranties</div><div class="n green">${cnt('active')+cnt('expiring')}</div><div class="s">still covered</div></div>
+   <div class="stat"><div class="t">Expiring in 30 days</div><div class="n" style="color:var(--amber)">${cnt('expiring')}</div><div class="s">remind customers</div></div>
+   <div class="stat"><div class="t">Open claims</div><div class="n red">${cnt('claim')}</div><div class="s">being handled</div></div>
+   <div class="stat"><div class="t">Expired</div><div class="n">${cnt('expired')}</div><div class="s">out of cover</div></div>`;
+  $('w-filters').innerHTML=W_FILTERS.map(([k,l])=>`<button class="btn btn-sm${wFilter===k?' btn-dark':''}" onclick="setWFilter('${k}')">${l}</button>`).join(' ');
+  const q=gv('w-q').toLowerCase();
+  let list=all.filter(s=>{
+    const st=wStatus(s).k;
+    if(wFilter==='active'&&!(st==='active'||st==='expiring'))return false;
+    if(['expiring','expired','claim'].includes(wFilter)&&st!==wFilter)return false;
+    if(!q)return true;
+    const d=s.device||{};
+    return [s.customer,s.phone,s.ref,d.imei1,d.imei2,d.serial,...s.items.map(i=>i.name)].some(v=>(v||'').toLowerCase().includes(q));
+  }).slice(0,300);
+  $('w-list').innerHTML=list.length?list.map(s=>{
+    const st=wStatus(s),d=s.device||{},dl=daysLeft(s);
+    return `<div class="wcard"><div class="wc-top"><div><b>${esc(s.customer)}</b><div class="muted" style="font-size:12px">${esc(s.phone||'No phone')}</div></div><span class="pill ${st.c}">${st.l}</span></div>
+      <div class="wc-dev">${s.items.map(i=>esc(i.name)+(i.qty>1?' ×'+i.qty:'')).join(', ')}</div>
+      <div class="wc-meta">${d.imei1?'IMEI '+esc(d.imei1)+'<br>':''}${d.serial?'Serial '+esc(d.serial)+'<br>':''}Sold ${fdate(s.time)} · Ref ${s.ref}<br>Warranty until <b>${fdate(wEnd(s))}</b> ${dl>=0?'('+dl+' days left)':'('+(-dl)+' days ago)'}</div>
+      ${(s.claims||[]).map(c=>`<div class="claim"><div class="c-top"><b>${fdate(c.date)}</b><span class="pill ${c.status==='open'?'p-blue':c.status==='resolved'?'p-green':'p-red'}">${c.status}</span></div>${esc(c.issue)}${c.note?`<div class="muted">↳ ${esc(c.note)}</div>`:''}
+        <div class="acts" style="margin-top:6px">${c.status==='open'?`<button class="btn btn-sm" onclick="setClaim('${s.ref}',${c.id},'resolved')">✓ Resolve</button><button class="btn btn-sm btn-danger" onclick="setClaim('${s.ref}',${c.id},'rejected')">Reject</button>`:`<button class="btn btn-sm" onclick="setClaim('${s.ref}',${c.id},'open')">Reopen</button>`}</div></div>`).join('')}
+      <div class="inline-form hidden" id="wf-${s.ref}"><div class="row2"><div><label class="lb">Issue</label><input class="inp" id="wi-${s.ref}" placeholder="e.g. Won't update iOS"></div><div><label class="lb">Date</label><input class="inp" type="date" id="wd-${s.ref}" value="${today()}"></div></div><button class="btn btn-primary btn-sm" onclick="addClaim('${s.ref}')">Save claim</button></div>
+      <div class="acts"><button class="btn btn-sm" onclick="showWarranty('${s.ref}')">🛡 Certificate</button><button class="btn btn-sm" onclick="viewSale('${s.ref}')">🧾 Receipt</button><button class="btn btn-sm btn-primary" onclick="$('wf-${s.ref}').classList.toggle('hidden')">+ Claim</button>${isAdmin()?`<button class="btn btn-sm" onclick="extendWarranty('${s.ref}')">⏱ Extend</button>`:''}</div></div>`;
+  }).join(''):'<div class="empty" style="grid-column:1/-1">No warranties match.</div>';
+}
+async function saveClaims(s,claims){
+  await q(sb.rpc('set_claims',{p_ref:s.ref,p_claims:claims}));
+  s.claims=claims;
+}
+async function addClaim(ref){
+  const s=SALES.find(x=>x.ref===ref);if(!s)return;
+  const issue=$('wi-'+ref).value.trim();if(!issue){alert('Describe the issue.');return;}
+  try{await saveClaims(s,[{id:Date.now(),date:$('wd-'+ref).value||today(),issue,status:'open',note:''},...(s.claims||[])]);renderWarranty();}catch(e){fail(e);}
+}
+async function setClaim(ref,cid,status){
+  const s=SALES.find(x=>x.ref===ref);if(!s)return;const c=(s.claims||[]).find(x=>x.id===cid);if(!c)return;
+  let note=c.note||'';
+  if(status!=='open'){const n=prompt(status==='resolved'?'Resolution note (optional):':'Reason for rejecting (optional):','');if(n===null)return;note=n.trim();}
+  try{await saveClaims(s,s.claims.map(x=>x.id===cid?{...x,status,note}:x));renderWarranty();}catch(e){fail(e);}
+}
+async function extendWarranty(ref){
+  const s=SALES.find(x=>x.ref===ref);if(!s)return;
+  const n=parseInt(prompt('Extend warranty by how many months?','3'));
+  if(isNaN(n)||n<=0)return;
+  const end=addMonths(wEnd(s),n);
+  try{await q(sb.rpc('extend_warranty',{p_ref:ref,p_end:end}));s.warrantyEnd=end;renderWarranty();}catch(e){fail(e);}
+}
+function showWarranty(ref){
+  const s=SALES.find(x=>x.ref===ref);if(!s)return;currentWarrantyRef=ref;const d=s.device||{};
+  const rows=[['Customer',s.customer],['Phone',s.phone],['Device',s.items.map(i=>i.name).join(', ')],['IMEI 1',d.imei1],['IMEI 2',d.imei2],['Serial No.',d.serial],['Colour',d.colour],['Date of sale',fdate(s.time)],['Valid until',fdate(wEnd(s))],['Receipt ref',s.ref]].filter(r=>r[1]);
+  $('wc-body').innerHTML=rows.map(r=>`<div class="r-row"><span class="l">${r[0]}</span><b style="text-align:right">${esc(r[1])}</b></div>`).join('')+
+    `<div class="r-warr">🛡 ${s.warrantyMonths??SETTINGS.warrantyMonths}-month software warranty</div><hr class="dash"><div class="r-foot" style="text-align:left;font-size:11px">${esc(SETTINGS.terms)}</div><div class="r-foot">${footHTML()}</div>`;
+  $('warranty-modal').classList.add('show');
+}
+function closeWarranty(){$('warranty-modal').classList.remove('show');}
+function waWarranty(){
+  const s=SALES.find(x=>x.ref===currentWarrantyRef);if(!s)return;const d=s.device||{};
+  const msg=`*${SETTINGS.store.toUpperCase()} – WARRANTY*\nHello ${s.customer}, your device is covered by our ${s.warrantyMonths??SETTINGS.warrantyMonths}-month software warranty.\n\nDevice: ${s.items.map(i=>i.name).join(', ')}${d.imei1?'\nIMEI: '+d.imei1:''}${d.serial?'\nSerial: '+d.serial:''}\nValid until: ${fdate(wEnd(s))}\nRef: ${s.ref}\n\n${SETTINGS.phone}`;
+  window.open(`https://wa.me/${normPhone(s.phone)}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+
+// ================= TRADE-INS =================
+function tiStatus(t){
+  if(t.status==='returned')return{k:'returned',l:'Returned to customer',c:'p-grey'};
+  if(t.status==='listed'){const p=prodById(t.productId);return p&&p.stock>0?{k:'listed',l:'Listed for sale',c:'p-blue'}:{k:'sold',l:'Sold',c:'p-green'};}
+  return{k:'stock',l:'In stock (not listed)',c:'p-amber'};
+}
+const TI_FILTERS=[['all','All'],['stock','In stock'],['listed','Listed'],['sold','Sold'],['returned','Returned']];
+function setTiFilter(k){tiFilter=k;renderTradeIns();}
+function renderTradeIns(){
+  const stockRows=TRADEINS.filter(t=>tiStatus(t).k==='stock');
+  const bb=TRADEINS.filter(t=>t.kind==='buyback');
+  $('ti-stats').innerHTML=`<div class="stat"><div class="t">Phones in stock</div><div class="n">${stockRows.length}</div><div class="s">not yet listed for sale</div></div>
+    <div class="stat"><div class="t">Money tied up</div><div class="n">${fmt(stockRows.reduce((a,t)=>a+t.value,0))}</div><div class="s">value of unlisted phones</div></div>
+    <div class="stat"><div class="t">Listed for sale</div><div class="n">${TRADEINS.filter(t=>tiStatus(t).k==='listed').length}</div><div class="s">in the POS now</div></div>
+    <div class="stat"><div class="t">Paid out in buy-backs</div><div class="n red">${fmt(bb.reduce((a,t)=>a+t.value,0))}</div><div class="s">${bb.length} phone(s)</div></div>`;
+  $('ti-filters').innerHTML=TI_FILTERS.map(([k,l])=>`<button class="btn btn-sm${tiFilter===k?' btn-dark':''}" onclick="setTiFilter('${k}')">${l}</button>`).join(' ');
+  const q=gv('ti-q').toLowerCase();
+  const list=TRADEINS.filter(t=>(tiFilter==='all'||tiStatus(t).k===tiFilter)&&(!q||[t.model,t.imei,t.serial,t.sellerName,t.sellerPhone,t.saleRef].some(v=>(v||'').toLowerCase().includes(q)))).slice(0,300);
+  $('ti-table').innerHTML=list.length?`<tr><th>Date</th><th>Phone</th><th>IMEI</th><th>Owner</th><th>How</th><th style="text-align:right">Value</th><th>Status</th><th></th></tr>`+list.map(t=>{
+    const st=tiStatus(t);
+    return `<tr><td>${fdate(t.created)}</td><td><b>${esc(t.model)} ${esc(t.storage)}</b><div class="muted" style="font-size:11px">${esc([t.colour,t.battery&&'battery '+t.battery,t.notes].filter(Boolean).join(' · '))}</div></td>
+      <td>${esc(t.imei)}</td><td>${esc(t.sellerName)||'<span class="muted">—</span>'}<div class="muted" style="font-size:11px">${esc(t.sellerPhone)}${t.sellerId?' · ID '+esc(t.sellerId):''}</div></td>
+      <td>${t.kind==='credit'?`Trade-in on <a href="#" onclick="viewSale('${t.saleRef}');return false">${esc(t.saleRef)}</a>`:`Bought (${t.payout==='mpesa'?'M-Pesa '+esc(t.payRef):'cash'})`}</td>
+      <td style="text-align:right;font-weight:700">${fmt(t.value)}</td><td><span class="pill ${st.c}">${st.l}</span></td>
+      <td>${st.k==='stock'?`<button class="btn btn-sm btn-primary" onclick="listTradeIn(${t.id})">List for sale</button>`:''}</td></tr>`;}).join(''):'<tr><td class="empty">No trade-ins yet. They appear here when a customer trades a phone in at the till, or when you record a buy-back.</td></tr>';
+}
+async function listTradeIn(id){
+  const t=TRADEINS.find(x=>x.id===id);if(!t)return;
+  const v=prompt('Selling price for '+t.model+' '+t.storage+' (you paid/credited '+fmt(t.value)+'):');if(v===null)return;
+  const price=parseFloat(v);if(isNaN(price)||price<=0){alert('Enter a valid selling price.');return;}
+  try{await q(sb.rpc('list_trade_in',{p_id:id,p_price:Math.round(price)}));await Promise.all([loadTradeIns(),loadProducts()]);renderTradeIns();alert('Listed. It now appears in the Sales screen under "Trade-ins".');}catch(e){fail(e);}
+}
+async function addBuyback(){
+  const model=gv('bb-model'),imei=gv('bb-imei'),value=parseFloat($('bb-value').value),method=$('bb-method').value,ref=gv('bb-ref');
+  if(!model){alert('Enter the phone model.');return;}
+  if(!/^\d{15}$/.test(imei)){alert('The IMEI must be exactly 15 digits.');return;}
+  if(isNaN(value)||value<=0){alert('Enter the amount paid.');return;}
+  if(method==='mpesa'&&!ref){alert('Enter the M-Pesa reference.');return;}
+  if(!gv('bb-seller')&&!confirm('No seller name entered. Record the buy-back anyway?'))return;
+  try{
+    await q(sb.rpc('record_buyback',{p:{model,storage:gv('bb-storage'),imei,serial:gv('bb-serial'),colour:gv('bb-colour'),battery:gv('bb-battery'),notes:gv('bb-notes'),
+      seller_name:gv('bb-seller'),seller_phone:gv('bb-phone'),seller_id_no:gv('bb-idno'),value:Math.round(value),payout_method:method,pay_ref:ref}}));
+    ['bb-model','bb-imei','bb-serial','bb-colour','bb-battery','bb-notes','bb-seller','bb-phone','bb-idno','bb-value','bb-ref'].forEach(i=>$(i).value='');$('bb-storage').value='';
+    $('bb-form').classList.add('hidden');await loadTradeIns();renderTradeIns();
+  }catch(e){fail(e);}
+}
+
+// ================= SUPPLIERS =================
+const TT={received:{label:'📦 Goods received',sign:1},returned:{label:'↩ Goods returned',sign:-1},paid:{label:'💸 Payment made',sign:-1},refund:{label:'💰 Refund received',sign:1}};
+const supBal=s=>s.txns.reduce((a,t)=>a+TT[t.type].sign*t.amount,0);
+function stmt(s){
+  const a=[...s.txns].sort((x,y)=>x.date>y.date?1:x.date<y.date?-1:x.id-y.id);let b=0;
+  return a.map(t=>{b+=TT[t.type].sign*t.amount;return{...t,bal:b};}).reverse();
+}
+const balView=b=>({col:b>0?'var(--red)':b<0?'var(--green)':'var(--ink)',lab:b>0?'We owe supplier':b<0?'Supplier owes us':'Settled'});
+const saveSupTxns=s=>q(sb.from('suppliers').update({txns:s.txns}).eq('id',s.id));
+function showAddSupplierForm(){$('add-supplier-form').classList.remove('hidden');$('ns-name').focus();}
+function hideAddSupplierForm(){$('add-supplier-form').classList.add('hidden');['ns-name','ns-contact','ns-phone','ns-notes','ns-open'].forEach(i=>$(i).value='');}
+async function addSupplier(){
+  const name=gv('ns-name');if(!name){alert('Enter the supplier name.');return;}
+  const open=parseFloat($('ns-open').value)||0;
+  const row={name,contact:gv('ns-contact'),phone:gv('ns-phone'),cat:$('ns-cat').value,notes:gv('ns-notes'),txns:open>0?[{id:Date.now(),type:'received',desc:'Opening balance',amount:open,date:today()}]:[]};
+  try{const d=await q(sb.from('suppliers').insert(row).select().single());SUPPLIERS.push(toSup(d));hideAddSupplierForm();renderSuppliers();}catch(e){fail(e);}
+}
+function renderSuppliers(){
+  if(curSup){renderSupDetail();return;}
+  $('sup-list-view').classList.remove('hidden');$('sup-detail-view').classList.add('hidden');
+  const bals=SUPPLIERS.map(supBal);
+  $('sup-stats').innerHTML=`<div class="stat"><div class="t">Suppliers</div><div class="n">${SUPPLIERS.length}</div><div class="s">accounts</div></div>
+    <div class="stat"><div class="t">We owe suppliers</div><div class="n red">${fmt(bals.filter(b=>b>0).reduce((a,b)=>a+b,0))}</div><div class="s">total payable</div></div>
+    <div class="stat"><div class="t">Suppliers owe us</div><div class="n green">${fmt(bals.filter(b=>b<0).reduce((a,b)=>a-b,0))}</div><div class="s">total receivable</div></div>
+    <div class="stat"><div class="t">Transactions</div><div class="n">${SUPPLIERS.reduce((a,s)=>a+s.txns.length,0)}</div><div class="s">recorded</div></div>`;
+  $('supplier-list').innerHTML=SUPPLIERS.length?SUPPLIERS.map((s,i)=>{
+    const v=balView(bals[i]),last=stmt(s)[0];
+    return `<div class="scard"><div class="wc-top"><div><b style="font-size:15px">🏭 ${esc(s.name)}</b><div class="muted" style="font-size:12px">${esc(s.contact)}${s.contact&&s.phone?' · ':''}${esc(s.phone)}</div></div><span class="pill p-grey">${esc(s.cat)}</span></div>
+      <div style="margin:12px 0 4px;font-size:22px;font-weight:800;color:${v.col}">${fmt(Math.abs(bals[i]))}</div><div class="muted" style="font-size:11px;text-transform:uppercase;letter-spacing:.4px">${v.lab}</div>
+      <div class="wc-meta" style="margin-top:6px">${s.txns.length} transaction(s)${last?' · last '+fdate(last.date):''}</div>
+      <div class="acts"><button class="btn btn-primary btn-sm" onclick="openSupplier(${s.id})">Open account →</button></div></div>`;
+  }).join(''):'<div class="empty" style="grid-column:1/-1">No suppliers yet — click “+ Add supplier”.</div>';
+}
+function openSupplier(id){curSup=id;renderSuppliers();}
+function closeSupplier(){curSup=null;renderSuppliers();}
+function renderSupDetail(){
+  const s=SUPPLIERS.find(x=>x.id===curSup);if(!s){curSup=null;renderSuppliers();return;}
+  $('sup-list-view').classList.add('hidden');$('sup-detail-view').classList.remove('hidden');
+  const sum=t=>s.txns.filter(x=>x.type===t).reduce((a,b)=>a+b.amount,0),b=supBal(s),v=balView(b);
+  $('sup-detail-view').innerHTML=`
+   <div class="page-h"><div><button class="btn btn-sm no-print" onclick="closeSupplier()">← All suppliers</button>
+     <h2 style="margin-top:10px">🏭 ${esc(s.name)} <span class="pill p-grey">${esc(s.cat)}</span></h2><p>${esc(s.contact)}${s.contact&&s.phone?' · ':''}${esc(s.phone)}${s.notes?' · '+esc(s.notes):''}</p></div>
+     <div class="acts no-print" style="margin:0"><button class="btn btn-primary" onclick="$('txn-form').classList.toggle('hidden')">+ Record transaction</button><button class="btn" onclick="printPage('suppliers-page')">🖨 Statement</button><button class="btn" onclick="waSupplier(${s.id})">💬 WhatsApp</button><button class="btn" onclick="editSupplier(${s.id})">✎ Edit</button><button class="btn btn-danger" onclick="delSupplier(${s.id})">Delete</button></div></div>
+   <div class="stats"><div class="stat"><div class="t">Goods received</div><div class="n">${fmt(sum('received'))}</div></div><div class="stat"><div class="t">Returned</div><div class="n">${fmt(sum('returned'))}</div></div>
+     <div class="stat"><div class="t">Paid</div><div class="n">${fmt(sum('paid'))}</div></div><div class="stat"><div class="t">${v.lab}</div><div class="n" style="color:${v.col}">${fmt(Math.abs(b))}</div></div></div>
+   <div class="card hidden no-print" id="txn-form" style="margin-bottom:14px;border-color:var(--red)"><div class="card-title">New transaction</div>
+     <div class="row3"><div><label class="lb">Type</label><select class="inp" id="tx-type" onchange="txTypeChange()">${Object.entries(TT).map(([k,t])=>`<option value="${k}">${t.label}</option>`).join('')}</select></div>
+       <div><label class="lb">Amount (KES)</label><input class="inp" type="number" min="0" id="tx-amt"></div><div><label class="lb">Date</label><input class="inp" type="date" id="tx-date" value="${today()}"></div></div>
+     <div class="row3" id="tx-stock"><div><label class="lb">Product (updates stock)</label><select class="inp" id="tx-prod"><option value="">— none —</option>${PRODUCTS.map(p=>`<option value="${p.id}">${esc(p.name)} (stock ${p.stock})</option>`).join('')}</select></div>
+       <div><label class="lb">Quantity</label><input class="inp" type="number" min="1" id="tx-qty" placeholder="1"></div><div><label class="lb">Details / reference</label><input class="inp" id="tx-desc" placeholder="Invoice no., notes…"></div></div>
+     <p class="muted" style="font-size:11.5px;margin-bottom:10px" id="tx-hint">Pick a product and quantity to add the stock to your inventory automatically (cost price is set to amount ÷ quantity).</p>
+     <button class="btn btn-primary" onclick="addTxn(${s.id})">Save transaction</button></div>
+   <div class="card"><div class="card-title">Account statement</div><div class="scroll-x">${s.txns.length?`<table class="tbl"><tr><th>Date</th><th>Type</th><th>Details</th><th style="text-align:right">Amount</th><th style="text-align:right">Balance</th><th class="no-print"></th></tr>
+     ${stmt(s).map(t=>{const p=t.productId?prodById(t.productId):null;return `<tr><td>${fdate(t.date)}</td><td>${TT[t.type].label}</td><td>${esc(t.desc)}${t.productId?`<div class="muted" style="font-size:11px">${esc(t.pname||p?.name||'')} × ${t.qty}</div>`:''}</td>
+       <td style="text-align:right;font-weight:700;color:${TT[t.type].sign>0?'var(--red)':'var(--green)'}">${TT[t.type].sign>0?'+':'−'}${fmt(t.amount)}</td><td style="text-align:right;font-weight:700">${fmt(t.bal)}</td><td class="no-print"><button class="x" onclick="delTxn(${s.id},${t.id})">✕</button></td></tr>`;}).join('')}</table>`:'<div class="empty">No transactions yet</div>'}</div></div>`;
+  txTypeChange();
+}
+function txTypeChange(){const t=$('tx-type')?.value;if($('tx-stock'))$('tx-stock').classList.toggle('hidden',!(t==='received'||t==='returned'));}
+async function addTxn(id){
+  const s=SUPPLIERS.find(x=>x.id===id);if(!s)return;
+  const type=$('tx-type').value,amt=parseFloat($('tx-amt').value),date=$('tx-date').value||today(),desc=gv('tx-desc');
+  if(isNaN(amt)||amt<=0){alert('Enter a valid amount greater than 0.');return;}
+  const t={id:Date.now(),type,desc,amount:amt,date};
+  const pid=parseInt($('tx-prod').value),qty=parseInt($('tx-qty').value);
+  let p=null;
+  if((type==='received'||type==='returned')&&pid){
+    p=prodById(pid);if(!p)return;
+    if(isNaN(qty)||qty<=0){alert('Enter the quantity for the selected product.');return;}
+    if(type==='returned'&&qty>p.stock){alert('You only have '+p.stock+' of '+p.name+' in stock.');return;}
+    t.productId=pid;t.qty=qty;t.pname=p.name;t.stockDelta=type==='received'?qty:-qty;
+  }
+  try{
+    if(p){const ns=await q(sb.rpc('adjust_stock',{p_id:pid,p_delta:t.stockDelta,p_cost:type==='received'?Math.round(amt/qty):null}));p.stock=ns;if(type==='received')p.cost=Math.round(amt/qty);}
+    s.txns=[t,...s.txns];
+    try{await saveSupTxns(s);}catch(e){s.txns=s.txns.filter(x=>x.id!==t.id);if(p){const ns=await q(sb.rpc('adjust_stock',{p_id:pid,p_delta:-t.stockDelta,p_cost:null}));p.stock=ns;}throw e;}
+    renderSupDetail();
+  }catch(e){fail(e);}
+}
+async function delTxn(sid,tid){
+  const s=SUPPLIERS.find(x=>x.id===sid),t=s?.txns.find(x=>x.id===tid);if(!t)return;
+  if(!confirm('Delete this entry?'+(t.stockDelta?' The stock change will be reversed.':'')))return;
+  const old=s.txns;
+  try{
+    s.txns=s.txns.filter(x=>x.id!==tid);await saveSupTxns(s);
+    if(t.stockDelta){const p=prodById(t.productId);const ns=await q(sb.rpc('adjust_stock',{p_id:t.productId,p_delta:-t.stockDelta,p_cost:null}));if(p)p.stock=ns;}
+    renderSupDetail();
+  }catch(e){s.txns=old;fail(e);}
+}
+async function editSupplier(id){
+  const s=SUPPLIERS.find(x=>x.id===id);if(!s)return;
+  const n=prompt('Supplier name:',s.name);if(n===null)return;if(!n.trim()){alert('Name required.');return;}
+  const c=prompt('Contact person:',s.contact);if(c===null)return;const p=prompt('Phone:',s.phone);if(p===null)return;const no=prompt('Notes:',s.notes);if(no===null)return;
+  try{await q(sb.from('suppliers').update({name:n.trim(),contact:c.trim(),phone:p.trim(),notes:no.trim()}).eq('id',id));Object.assign(s,{name:n.trim(),contact:c.trim(),phone:p.trim(),notes:no.trim()});renderSupDetail();}catch(e){fail(e);}
+}
+async function delSupplier(id){
+  const s=SUPPLIERS.find(x=>x.id===id);if(!s||!confirm('Delete supplier "'+s.name+'" and all its records? (Stock changes already made are not reversed.)'))return;
+  try{await q(sb.from('suppliers').delete().eq('id',id));SUPPLIERS=SUPPLIERS.filter(x=>x.id!==id);curSup=null;renderSuppliers();}catch(e){fail(e);}
+}
+function waSupplier(id){
+  const s=SUPPLIERS.find(x=>x.id===id);if(!s)return;const b=supBal(s);
+  const msg=`Hello ${s.contact||s.name}, this is ${SETTINGS.store}. Account statement: `+(b>0?`we owe you ${fmt(b)}.`:b<0?`you owe us ${fmt(-b)}.`:'the account is settled.')+` Thank you.`;
+  window.open(`https://wa.me/${normPhone(s.phone)}?text=${encodeURIComponent(msg)}`,'_blank');
+}
+
+// ================= REPORTS =================
+function rangeFrom(){
+  const r=$('rp-range')?.value||'today',now=new Date();
+  if(r==='today')return new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  if(r==='7'||r==='30')return new Date(now.getTime()-parseInt(r)*86400000);
+  if(r==='month')return new Date(now.getFullYear(),now.getMonth(),1);
+  return null;
+}
+const inRange=iso=>{const f=rangeFrom();return !f||new Date(iso)>=f;};
+function rangeSales(){
+  const r=$('rp-range')?.value||'today',now=new Date();let from=null;
+  if(r==='today')from=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  else if(r==='7'||r==='30')from=new Date(now.getTime()-parseInt(r)*86400000);
+  else if(r==='month')from=new Date(now.getFullYear(),now.getMonth(),1);
+  return SALES.filter(s=>!from||new Date(s.time)>=from);
+}
+function renderReports(){
+  const all=rangeSales(),ss=all.filter(s=>!s.voided);
+  const rev=ss.reduce((a,s)=>a+s.grand,0),items=ss.reduce((a,s)=>a+s.items.reduce((x,i)=>x+i.qty,0),0),disc=ss.reduce((a,s)=>a+s.discount,0);
+  const costed=ss.filter(s=>s.items.every(i=>i.cost>0));
+  const profit=costed.reduce((a,s)=>a+s.grand+(s.tradeIn||0)-s.items.reduce((x,i)=>x+i.cost*i.qty,0),0);
+  const tiRows=TRADEINS.filter(t=>inRange(t.created)),tiCredit=ss.reduce((a,s)=>a+(s.tradeIn||0),0),bbPaid=tiRows.filter(t=>t.kind==='buyback').reduce((a,t)=>a+t.value,0);
+  const pay={mpesa:0,cash:0,card:0};ss.forEach(s=>pay[s.payMethod]+=s.grand);
+  const maxPay=Math.max(1,...Object.values(pay));
+  const prod={};ss.forEach(s=>s.items.forEach(i=>{const p=prod[i.name]||(prod[i.name]={q:0,r:0});p.q+=i.qty;p.r+=i.price*i.qty;}));
+  const top=Object.entries(prod).sort((a,b)=>b[1].q-a[1].q||b[1].r-a[1].r).slice(0,8);
+  const cash={};ss.forEach(s=>{const c=cash[s.cashier]||(cash[s.cashier]={n:0,r:0});c.n++;c.r+=s.grand;});
+  const days={};ss.forEach(s=>{const k=ymd(s.time);const d=days[k]||(days[k]={n:0,r:0});d.n++;d.r+=s.grand;});
+  const dayList=Object.entries(days).sort((a,b)=>b[0].localeCompare(a[0])).slice(0,14);const maxDay=Math.max(1,...dayList.map(d=>d[1].r));
+  $('rp-body').innerHTML=`<div class="stats">
+    <div class="stat"><div class="t">Revenue</div><div class="n red">${fmt(rev)}</div><div class="s">${ss.length} sale(s)</div></div>
+    <div class="stat"><div class="t">Items sold</div><div class="n">${items}</div><div class="s">avg sale ${fmt(ss.length?rev/ss.length:0)}</div></div>
+    <div class="stat"><div class="t">Discounts given</div><div class="n">${fmt(disc)}</div><div class="s">${all.length-ss.length} voided sale(s)</div></div>
+    <div class="stat"><div class="t">Est. profit</div><div class="n green">${costed.length?fmt(profit):'—'}</div><div class="s">${costed.length?`on ${costed.length} sale(s) with cost set`:'set cost prices in Admin → Inventory'}</div></div>
+    <div class="stat"><div class="t">Trade-in credits</div><div class="n">${fmt(tiCredit)}</div><div class="s">given against sales</div></div>
+    <div class="stat"><div class="t">Phones bought (paid out)</div><div class="n">${fmt(bbPaid)}</div><div class="s">${tiRows.filter(t=>t.kind==='buyback').length} buy-back(s)</div></div></div>
+   <div class="two"><div class="card"><div class="card-title">💳 Payment methods</div>${Object.entries(pay).map(([k,v])=>`<div class="bar-row"><span class="lbl">${k==='mpesa'?'M-Pesa':k[0].toUpperCase()+k.slice(1)}</span><div class="bar"><i style="width:${v/maxPay*100}%"></i></div><span class="val">${fmt(v)}</span></div>`).join('')}
+     <div class="card-title" style="margin-top:16px">👤 By cashier</div>${Object.entries(cash).map(([k,v])=>`<div class="r-row"><span>${esc(k)}</span><b>${v.n} sale(s) · ${fmt(v.r)}</b></div>`).join('')||'<div class="muted">No sales</div>'}</div>
+    <div class="card"><div class="card-title">🏆 Top products</div>${top.length?`<table class="tbl"><tr><th>Product</th><th>Qty</th><th style="text-align:right">Revenue</th></tr>${top.map(([n,v])=>`<tr><td>${esc(n)}</td><td>${v.q}</td><td style="text-align:right">${fmt(v.r)}</td></tr>`).join('')}</table>`:'<div class="muted">No sales</div>'}</div></div>
+   <div class="card"><div class="card-title">📅 Daily sales</div>${dayList.length?dayList.map(([k,v])=>`<div class="bar-row"><span class="lbl" style="width:90px">${fdate(k+'T12:00')}</span><div class="bar"><i style="width:${v.r/maxDay*100}%"></i></div><span class="val" style="width:150px">${fmt(v.r)} · ${v.n}</span></div>`).join(''):'<div class="muted">No sales in this period</div>'}</div>`;
+}
+function exportSalesCSV(){
+  const q=v=>'"'+String(v??'').replace(/"/g,'""')+'"';
+  const rows=[['Ref','Date','Customer','Phone','Items','IMEI 1','IMEI 2','Serial','Subtotal','Discount','Trade-in credit','Total','Payment','Pay ref','Cashier','Warranty until','Status']];
+  rangeSales().forEach(s=>{const d=s.device||{};rows.push([s.ref,fdt(s.time),s.customer,s.phone,s.items.map(i=>i.name+' x'+i.qty).join('; '),d.imei1,d.imei2,d.serial,s.sub,s.discount,s.tradeIn||0,s.grand,s.payMethod,s.payRef,s.cashier,fdate(wEnd(s)),s.voided?'VOIDED':'OK']);});
+  download('sales-'+today()+'.csv','\ufeff'+rows.map(r=>r.map(q).join(',')).join('\n'),'text/csv');
+}
+
+// ================= ADMIN =================
+function renderSalesLog(){
+  const q=gv('log-q').toLowerCase();
+  const list=SALES.filter(s=>!q||[s.customer,s.phone,s.ref,s.device?.imei1,s.device?.serial].some(v=>(v||'').toLowerCase().includes(q))).slice(0,100);
+  $('sales-log').innerHTML=list.length?list.map(s=>`<div class="log-i" style="${s.voided?'opacity:.5':''}"><div><b>${esc(s.customer)}${s.voided?' <span class="pill p-grey">VOID</span>':''}</b>
+    <small>${esc(s.cashier)} · ${fdt(s.time)} · ${s.items.reduce((a,i)=>a+i.qty,0)} item(s) · ${s.payMethod}</small>${s.device?.imei1?`<small>IMEI ${esc(s.device.imei1)}</small>`:''}
+    <div class="acts" style="margin-top:5px"><button class="btn btn-sm" onclick="viewSale('${s.ref}')">View</button>${!s.voided?`<button class="btn btn-sm btn-danger" onclick="voidSale('${s.ref}')">Void</button>`:''}</div></div>
+    <div style="text-align:right"><b style="color:var(--red);${s.voided?'text-decoration:line-through':''}">${fmt(s.grand)}</b><small>${s.ref}</small></div></div>`).join(''):'<div class="empty">No sales found</div>';
+}
+function renderAdmin(){
+  const t=todaySales();
+  $('a-revenue').textContent=fmt(t.reduce((a,s)=>a+s.grand,0));$('a-txn').textContent=t.length+' transaction'+(t.length!==1?'s':'');
+  $('a-prods').textContent=PRODUCTS.length;
+  $('a-stockval').textContent=fmt(PRODUCTS.reduce((a,p)=>a+(p.cost||0)*p.stock,0));
+  $('a-lowstock').textContent=PRODUCTS.filter(p=>p.stock<=SETTINGS.lowStock).length;$('a-lowlabel').textContent=SETTINGS.lowStock+' or fewer left';
+  $('a-users').textContent=USERS.filter(u=>u.active).length;
+  $('users-table').innerHTML=`<tr><th>User</th><th>Role</th><th>Status</th><th></th></tr>`+USERS.map(u=>`<tr><td><b>${esc(u.name)}</b><div class="muted" style="font-size:11px">${esc(u.username)}</div></td>
+    <td><span class="pill ${u.role==='admin'?'p-red':'p-blue'}">${u.role}</span></td><td><span class="pill ${u.active?'p-green':'p-grey'}">${u.active?'Active':'Inactive'}</span></td>
+    <td style="white-space:nowrap">${u.id!==currentUser.id?`<button class="btn btn-sm" onclick="toggleUser('${u.id}')">${u.active?'Deactivate':'Activate'}</button> <button class="btn btn-sm" onclick="toggleRole('${u.id}')">Make ${u.role==='admin'?'cashier':'admin'}</button>`:'<span class="muted" style="font-size:11px">You</span>'}</td></tr>`).join('');
+  renderSalesLog();
+  $('prod-table').innerHTML=`<tr><th>Product</th><th>Category</th><th>Price</th><th>Cost</th><th>Stock</th><th></th></tr>`+PRODUCTS.map(p=>`<tr><td>${esc(p.name)}</td><td><span class="muted" style="font-size:11px">${esc(p.cat)}</span></td>
+    <td><input class="inp-sm" type="number" min="0" style="width:92px;font-weight:700;color:var(--red)" value="${p.price}" onchange="setField(${p.id},'price',this.value)"></td>
+    <td><input class="inp-sm" type="number" min="0" style="width:92px" value="${p.cost||0}" onchange="setField(${p.id},'cost',this.value)"></td>
+    <td><input class="inp-sm" type="number" min="0" style="width:64px;${p.stock<=SETTINGS.lowStock?'color:var(--red);font-weight:700':''}" value="${p.stock}" onchange="setField(${p.id},'stock',this.value)"></td>
+    <td style="white-space:nowrap"><button class="btn btn-sm" onclick="restockProd(${p.id})">+10</button> <button class="btn btn-sm btn-danger" onclick="delProd(${p.id})">Remove</button></td></tr>`).join('');
+  $('cat-list').innerHTML=[...new Set(PRODUCTS.map(p=>p.cat))].map(c=>`<option value="${esc(c)}">`).join('');
+  $('s-store').value=SETTINGS.store;$('s-phone').value=SETTINGS.phone;$('s-address').value=SETTINGS.address;$('s-social').value=SETTINGS.social;
+  $('s-months').value=SETTINGS.warrantyMonths;$('s-autoprint').value=SETTINGS.autoPrint?'1':'0';$('s-low').value=SETTINGS.lowStock;$('s-terms').value=SETTINGS.terms;
+}
+function viewSale(ref){const s=SALES.find(x=>x.ref===ref);if(s)showReceipt(s,false);}
+async function voidSale(ref){
+  const s=SALES.find(x=>x.ref===ref);if(!s||s.voided)return;
+  if(!confirm('Void sale '+ref+' ('+fmt(s.grand)+')? Items will be returned to stock and the warranty cancelled.'))return;
+  try{await q(sb.rpc('void_sale',{p_ref:ref}));await Promise.all([loadSales(),loadProducts(),loadTradeIns()]);refreshStats();renderAdmin();}catch(e){fail(e);}
+}
+const adminCount=()=>USERS.filter(x=>x.active&&x.role==='admin').length;
+async function toggleUser(id){
+  const u=USERS.find(x=>x.id===id);if(!u)return;
+  if(u.active&&u.role==='admin'&&adminCount()<=1){alert('You must keep at least one active admin.');return;}
+  try{await q(sb.from('profiles').update({active:!u.active}).eq('id',id));u.active=!u.active;renderAdmin();}catch(e){fail(e);}
+}
+async function toggleRole(id){
+  const u=USERS.find(x=>x.id===id);if(!u)return;
+  if(u.role==='admin'&&u.active&&adminCount()<=1){alert('You must keep at least one active admin.');return;}
+  const role=u.role==='admin'?'cashier':'admin';
+  try{await q(sb.from('profiles').update({role}).eq('id',id));u.role=role;renderAdmin();}catch(e){fail(e);}
+}
+async function addUser(){
+  const un=gv('new-uname').toLowerCase(),pw=$('new-upass').value.trim(),role=$('new-urole').value;
+  if(!un||!pw){alert('Please fill username and password');return;}
+  if(!/^[a-z0-9._-]+$/.test(un)){alert('Username can only use letters, numbers, dot, dash and underscore (no spaces).');return;}
+  if(pw.length<6){alert('Password must be at least 6 characters.');return;}
+  if(USERS.find(u=>u.username===un)){alert('Username already exists');return;}
+  try{
+    // a separate client so the admin stays signed in
+    const tmp=window.supabase.createClient(API_URL,SUPABASE_ANON_KEY,{auth:{persistSession:false,autoRefreshToken:false,detectSessionInUrl:false}});
+    const r=await tmp.auth.signUp({email:un+EMAIL_DOMAIN,password:pw,options:{data:{name:un[0].toUpperCase()+un.slice(1)}}});
+    if(r.error)throw new Error(r.error.message);
+    const uid=r.data.user?.id;if(!uid)throw new Error('The account could not be created.');
+    await q(sb.from('profiles').update({role,active:true}).eq('id',uid));
+    $('new-uname').value='';$('new-upass').value='';
+    await loadProfiles();renderAdmin();
+  }catch(e){fail(e);}
+}
+async function setField(id,f,v){
+  const p=prodById(id),n=f==='stock'?parseInt(v):parseFloat(v);if(!p)return;
+  if(isNaN(n)||n<0){alert('Invalid '+f);renderAdmin();return;}
+  try{await q(sb.from('products').update({[f]:Math.round(n)}).eq('id',id));p[f]=Math.round(n);renderProds();renderCart();renderAdmin();}catch(e){fail(e);renderAdmin();}
+}
+async function restockProd(id){
+  try{const ns=await q(sb.rpc('adjust_stock',{p_id:id,p_delta:10,p_cost:null}));const p=prodById(id);if(p)p.stock=ns;renderAdmin();renderProds();}catch(e){fail(e);}
+}
+async function delProd(id){
+  if(!confirm('Remove this product from inventory?'))return;
+  try{await q(sb.from('products').delete().eq('id',id));PRODUCTS=PRODUCTS.filter(x=>x.id!==id);cart=cart.filter(c=>c.id!==id);renderAdmin();renderProds();renderCart();}catch(e){fail(e);}
+}
+async function addProduct(){
+  const name=gv('np-name'),cat=gv('np-cat')||'Other',price=parseFloat($('np-price').value),cost=parseFloat($('np-cost').value)||0,stock=parseInt($('np-stock').value)||0;
+  if(!name||isNaN(price)||price<0){alert('Enter a product name and a valid price.');return;}
+  try{
+    const d=await q(sb.from('products').insert({name,cat,price:Math.round(price),cost:Math.round(cost),stock:Math.max(0,stock),storage:gv('np-storage')}).select().single());
+    PRODUCTS.push(toProd(d));
+    ['np-name','np-cat','np-price','np-cost','np-stock'].forEach(i=>$(i).value='');$('np-storage').value='';renderAdmin();renderProds();renderCats();
+  }catch(e){fail(e);}
+}
+async function resetPriceList(){
+  if(!confirm('Reset inventory to the official price list? Custom prices, costs, stock counts and added products will be replaced (sales history is kept).'))return;
+  try{
+    await q(sb.from('products').delete().gt('id',0));
+    await q(sb.from('products').insert(defaultProductRows()));
+    cart=[];await loadProducts();renderAdmin();renderProds();renderCats();renderCart();
+  }catch(e){fail(e);}
+}
+async function saveSettings(){
+  const m=parseInt($('s-months').value),l=parseInt($('s-low').value);
+  if(!gv('s-store')){alert('Store name is required.');return;}
+  if(isNaN(m)||m<0||isNaN(l)||l<0){alert('Warranty months and low-stock level must be 0 or more.');return;}
+  const data={store:gv('s-store'),phone:gv('s-phone'),address:gv('s-address'),social:gv('s-social'),warrantyMonths:m,lowStock:l,autoPrint:$('s-autoprint').value==='1',terms:$('s-terms').value.trim()};
+  try{await q(sb.from('settings').upsert({id:1,data}));SETTINGS=data;applyBrand();renderAdmin();renderProds();alert('Settings saved. New warranty length applies to future sales.');}catch(e){fail(e);}
+}
+async function exportData(){
+  try{await Promise.all([loadProfiles(),loadSuppliers(),loadSales(),loadProducts()]);}catch(e){fail(e);return;}
+  download('ngs-pos-backup-'+today()+'.json',JSON.stringify({exported:new Date().toISOString(),PRODUCTS,SALES,SUPPLIERS,SETTINGS,USERS:USERS.map(u=>({username:u.username,name:u.name,role:u.role,active:u.active}))},null,1),'application/json');
+}
+
+// ---------- connection check shown on the sign-in screen ----------
+const probe=base=>fetch(base+'/auth/v1/settings',{headers:{apikey:SUPABASE_ANON_KEY}});
+async function checkConnection(){
+  const el=$('conn-status');if(!el)return;
+  let r=null,firstErr=null,viaSite=false;
+  try{r=await probe(API_URL);}catch(e){firstErr=e;}
+  if(!r&&location.protocol!=='file:'){
+    // direct address blocked (extension / network): try through this site's own address
+    const alt=location.origin+'/supabase';
+    try{
+      const r2=await probe(alt);
+      if(r2.ok&&(r2.headers.get('content-type')||'').includes('json')){API_URL=alt;sb=window.supabase.createClient(API_URL,SUPABASE_ANON_KEY);r=r2;viaSite=true;}
+    }catch(e){}
+  }
+  if(!r){el.style.color='#b91423';el.textContent='⚠ This page cannot reach Supabase ('+(firstErr?.message||'blocked')+'). Switch off ad blockers/VPN/privacy shields, try another network, or add the /supabase rewrite rule on Render (see instructions).';return;}
+  if(!r.ok){const t=await r.text();el.style.color='#b91423';el.textContent='⚠ Supabase answered '+r.status+': '+t.slice(0,140);return;}
+  const j=await r.json();
+  if(j.mailer_autoconfirm===false){el.style.color='#92400e';el.textContent='✓ Connected, but “Confirm email” is ON in Supabase. Turn it off (Authentication → Sign In / Providers → Email) or new users cannot sign in.';}
+  else{el.style.color='#166534';el.textContent='✓ Connected to Supabase'+(viaSite?' (through this site)':'');}
+}
+
+// ================= INIT =================
+function fillModelList(){const o=PRICE_LIST.map(m=>`<option value="${m[0]}">`).join('');if($('ti-models'))$('ti-models').innerHTML=o;}
+fillModelList();
+(async function init(){
+  applyBrand();renderCart();
+  if(!sb){if(CONFIGURED&&!window.supabase)$('cfg-warn').textContent='The Supabase library could not be loaded (blocked by an extension or the network). Allow cdn.jsdelivr.net, then refresh.';$('cfg-warn').style.display='block';$('login-btn').disabled=true;return;}
+  $('cfg-warn').style.display='none';
+  await checkConnection();
+  try{
+    const r=await sb.auth.getSession();
+    if(r.data?.session)await enterApp(r.data.session.user);
+  }catch(e){}
+})();
+</script>
+</body>
+</html>
